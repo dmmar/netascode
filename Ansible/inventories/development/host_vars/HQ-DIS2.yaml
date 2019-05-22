@@ -1,0 +1,238 @@
+# HQ-DIS2
+
+# Connection variables
+
+ansible_user: 'cisco'
+ansible_ssh_pass: 'cisco'
+ansible_connection: network_cli
+ansible_network_os: ios
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: False
+
+# for napalm_install_config (Modules)
+config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/development/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: HQ-DIS2
+
+timezone: NZDT 13 0
+ntp_server: 10.255.255.2
+
+#########
+#  STP  #
+#########
+
+stp_mode: rapid-pvst
+
+# HQ-DIS1 (ROOT)
+
+# stp(ios.j2)
+
+stp_vlan:
+  - vlan_number: 1
+    vlan_priority: 4096
+  - vlan_number: 10
+    vlan_priority: 4096
+  - vlan_number: 20
+    vlan_priority: 4096
+  - vlan_number: 30
+    vlan_priority: 4096
+  - vlan_number: 40
+    vlan_priority: 4096
+
+#########
+#  VTP  #
+#########
+
+vtp_mode: vtp mode off
+
+#########
+# VLANS #
+#########
+
+# vlans-j2
+
+vlans:
+  - vlan_number: 10
+    vlan_name: Sales
+  - vlan_number: 20
+    vlan_name: Managers
+  - vlan_number: 30
+    vlan_name: Developers
+  - vlan_number: 40
+    vlan_name: Accounting
+
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'GigabitEthernet0/0'
+
+int_gi1: 'GigabitEthernet0/1'
+int_gi2: 'GigabitEthernet0/2'
+int_gi3: 'GigabitEthernet0/3'
+
+int_gi4: 'GigabitEthernet1/0'
+int_gi5: 'GigabitEthernet1/1'
+int_gi6: 'GigabitEthernet1/2'
+int_gi7: 'GigabitEthernet1/3'
+
+int_gi8: 'GigabitEthernet2/0'
+int_gi9: 'GigabitEthernet2/1'
+int_gi10: 'GigabitEthernet2/2'
+int_gi11: 'GigabitEthernet2/3'
+
+int_gi12: 'GigabitEthernet3/0'
+int_gi13: 'GigabitEthernet3/1'
+int_gi14: 'GigabitEthernet3/2'
+int_gi15: 'GigabitEthernet3/3'
+
+int_vlan10: 'Vlan10'
+int_vlan20: 'Vlan20'
+int_vlan30: 'Vlan30'
+int_vlan40: 'Vlan40'
+
+int_lo0: 'Loopback0'
+
+int_po1: 'Port-channel1'
+
+trunk_encapsulation: switchport trunk encapsulation dot1q
+
+# Interfaces-j2
+
+interfaces:
+  - name: "{{ int_lo0 }}"
+    description: "OSPF RID"
+    ip: 169.254.255.2 255.255.255.255
+    shutdown:
+  - name: "{{ int_vlan10 }}"
+    description: "Sales"
+    ip: 10.255.100.3 255.255.255.224
+    shutdown: no shutdown
+  - name: "{{ int_vlan20 }}"
+    description: "Managers"
+    ip: 10.255.100.35 255.255.255.224
+    shutdown: no shutdown
+  - name: "{{ int_vlan30 }}"
+    description: "Developers"
+    ip: 10.255.100.67 255.255.255.224
+    shutdown: no shutdown
+  - name: "{{ int_vlan40 }}"
+    description: "Accounting"
+    ip: 10.255.100.99 255.255.255.224
+    shutdown: no shutdown
+
+# Interfaces-j2(ios_l2_to_l3.j2)
+
+interface_l2_to_l3:
+  - name: "{{ int_gi4 }}"
+    description: "TO_HQ1-CO1"
+    ip: 10.255.1.14 255.255.255.252
+    shutdown:
+
+# Interfaces-j2(ios_trunk.j2)
+
+interfaces_trunk:
+  - name: "{{ int_gi8 }}"
+    description: "TO_HQ-AC1"
+    dtp: switchport nonegotiate
+    shutdown:
+  - name: "{{ int_gi9 }}"
+    description: "TO_HQ-AC2"
+    dtp: switchport nonegotiate
+    shutdown:
+  - name: "{{ int_gi6 }}"
+    description: "TO_HQ-AC4"
+    dtp: switchport nonegotiate
+    shutdown:
+  - name: "{{ int_gi5 }}"
+    description: "TO_HQ-AC3"
+    dtp: switchport nonegotiate
+    shutdown:
+
+# Interfaces_l2_channel-j2
+
+interfaces_l2_channel:
+  - name: "{{ int_gi1 }}"
+    description: "TO_HQ-DIS1"
+    po_number: 1
+    po_mode: active
+    shutdown:
+  - name: "{{ int_gi2 }}"
+    description: "TO_HQ-DIS1"
+    po_number: 1
+    po_mode: active
+    shutdown:
+
+interfaces_po:
+  - name: "{{ int_po1 }}"
+    description: "TO_HQ-DIS1-LACP"
+    mode: trunk
+    dtp: switchport nonegotiate
+    shutdown:
+
+# FHRP-j2
+
+interfaces_glbp:
+  - name: "{{ int_vlan10 }}"
+    glbp_group: 10
+    glbp_priority: 100
+    preempt: glbp 10 preempt
+    glbp_ip: 10.255.100.1
+    glbp_load_balancing: round-robin
+  - name: "{{ int_vlan20 }}"
+    glbp_group: 20
+    glbp_priority: 100
+    preempt: glbp 20 preempt
+    glbp_ip: 10.255.100.33
+    glbp_load_balancing: round-robin
+  - name: "{{ int_vlan30 }}"
+    glbp_group: 30
+    glbp_priority: 100
+    preempt: glbp 30 preempt
+    glbp_ip: 10.255.100.65
+    glbp_load_balancing: round-robin
+  - name: "{{ int_vlan40 }}"
+    glbp_group: 40
+    glbp_priority: 100
+    preempt: glbp 40 preempt
+    glbp_ip: 10.255.100.97
+    glbp_load_balancing: round-robin
+
+###########
+# Routing #
+###########
+
+# Static
+
+# Dynamic
+## OSPFv2
+### Area 0 and 100
+
+ospf_proccess: 1
+router_id: 169.254.255.2
+# passive-interface default
+no_passive_ints:
+  - int: "{{ int_vlan10 }}"
+  - int: "{{ int_vlan20 }}"
+  - int: "{{ int_vlan30 }}"
+  - int: "{{ int_vlan40 }}"
+  - int: "{{ int_gi4 }}"
+networks:
+  - net: 10.255.1.12 0.0.0.3 area 0
+  - net: 10.255.100.0 0.0.0.31 area 100
+  - net: 10.255.100.32 0.0.0.31 area 100
+  - net: 10.255.100.64 0.0.0.31 area 100
+  - net: 10.255.100.96 0.0.0.31 area 100

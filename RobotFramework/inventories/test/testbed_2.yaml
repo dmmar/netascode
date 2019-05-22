@@ -1,0 +1,58 @@
+testbed:
+    name: Testbed
+
+devices:
+# HQ-Clients
+    HQ-C1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5041
+    HQ-C2:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5033
+    HQ-C3:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5051
+    HQ-C4:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5049
+# BR1-Clients
+    BR1-C1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5055
+# BR2-Clients
+    BR2-C1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.3.1
+                port: 5053
+
+
+

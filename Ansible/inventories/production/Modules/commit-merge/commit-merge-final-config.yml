@@ -1,0 +1,30 @@
+---
+- name: Push all full FINAL configuration
+  hosts: ALL
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python"
+
+  tasks:
+
+  # Push the single FINAL conf:
+  - name: Push 'FINAL.conf' configuration with NAPALM (DO execute 'FINAL.conf' config)
+    when: inventory_hostname not in groups['Cisco-ASA']
+    napalm_install_config:
+        optional_args: {'global_delay_factor': 2}
+        hostname: "{{ ansible_host }}"
+        username: "{{ ansible_user }}"
+        dev_os: "{{ ansible_network_os }}"
+        password: "{{ ansible_ssh_pass }}"
+        config_file: "{{ config_dir }}/{{ inventory_hostname }}/{{ config_file }}"
+        commit_changes: True
+        replace_config: "{{ replace_config }}"
+        diff_file: "{{ config_dir }}/{{ inventory_hostname }}/FINAL.diff"
+
+  # Only for Cisco ASA (HQ-FW1) push FINAL_pre.conf
+  post_tasks:
+    - name: Run python script to push full FINAL configuration
+      when: inventory_hostname in groups['Cisco-ASA']
+      command: python asa_send_commands.py
+      args:
+        chdir: Python_scripts/vASA/inventories/production/

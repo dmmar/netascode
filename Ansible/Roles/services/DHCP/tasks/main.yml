@@ -1,0 +1,5 @@
+---
+
+- name: generate dhcp from templates
+  when: inventory_hostname in groups['DHCP-Servers']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/dhcp-service.conf

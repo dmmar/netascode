@@ -1,0 +1,68 @@
+# ISP
+
+# Connection variables
+
+ansible_user: 'cisco'
+ansible_ssh_pass: 'cisco'
+ansible_connection: network_cli
+ansible_network_os: ios
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: False
+
+# for napalm_install_config (Modules)
+#config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/test/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: ISP
+
+timezone: NZDT 13 0
+ntp_server: 8.8.8.8
+
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'GigabitEthernet0/0'
+
+int_gi1: 'GigabitEthernet0/1'
+int_gi2: 'GigabitEthernet0/2'
+int_gi3: 'GigabitEthernet0/3'
+int_gi4: 'GigabitEthernet0/4'
+int_loop1: 'Loopback8'
+
+
+# Interfaces-j2
+
+interfaces:
+  - name: "{{ int_loop1 }}"
+    description: "Google Public DNS"
+    ip: 8.8.8.8 255.255.255.255
+    shutdown:
+  - name: "{{ int_gi1 }}"
+    description: "TO_BR1-ED1-CompanyX"
+    ip: 15.15.15.1 255.255.255.252
+    shutdown:
+  - name: "{{ int_gi2 }}"
+    description: "TO_BR2-FW1-CompanyX"
+    ip: 20.2.2.1 255.255.255.252
+    shutdown:
+  - name: "{{ int_gi3 }}"
+    description: "TO_HQ-ED1-CompanyX"
+    ip: 1.1.1.1 255.255.255.252
+    shutdown:
+  - name: "{{ int_gi4 }}"
+    description: "TO_HQ-FW1-CompanyX"
+    ip: 2.2.2.1 255.255.255.252
+    shutdown:

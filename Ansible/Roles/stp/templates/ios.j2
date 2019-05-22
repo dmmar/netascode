@@ -1,0 +1,7 @@
+!
+spanning-tree mode {{ stp_mode }}
+!
+{% for vlan in stp_vlan %}
+spanning-tree vlan {{ vlan.vlan_number }} priority {{ vlan.vlan_priority }}
+{% endfor %}
+!

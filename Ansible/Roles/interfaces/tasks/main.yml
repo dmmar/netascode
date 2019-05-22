@@ -1,0 +1,25 @@
+---
+#
+- name: generate ip interface configs from templates (Cisco,JunOS,VyOS)
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/4_interfaces-ip.conf
+#
+- name: generate ROTS interfaces configs from templates (Cisco)
+  when: inventory_hostname in groups['routers-ROTS']
+  template: src=../templates/{{ansible_network_os}}_ROTS.j2 dest={{config_dir}}/{{inventory_hostname}}/4_interfaces-ROTS.conf
+#
+- name: generate ip interface from L2 to L3 configs from templates (Cisco)
+  when: inventory_hostname in groups['L3-switches']
+  template: src=../templates/{{ansible_network_os}}_l2_to_l3.j2 dest={{config_dir}}/{{inventory_hostname}}/4_interfaces-l2-to-l3.conf
+#
+- name: generate trunks from templates (Cisco)
+  when: inventory_hostname in groups['switches']
+  template: src=../templates/{{ansible_network_os}}_trunk.j2 dest={{config_dir}}/{{inventory_hostname}}/4_interfaces-trunk.conf
+#
+- name: generate access from templates (Cisco)
+  when: inventory_hostname in groups['access_switches']
+  template: src=../templates/{{ansible_network_os}}_access.j2 dest={{config_dir}}/{{inventory_hostname}}/4_interfaces-access.conf
+#
+- name: generate l2 port-channels from templates (Cisco)
+  when: inventory_hostname in groups['po_switches']
+  template: src=../templates/{{ansible_network_os}}_l2_channel.j2 dest={{config_dir}}/{{inventory_hostname}}/5_interfaces-po-channel.conf
+#

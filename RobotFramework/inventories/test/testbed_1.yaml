@@ -1,0 +1,77 @@
+# Example
+# -------
+#
+#   an example testbed file - testbed.yaml
+
+testbed:
+    name: Testbed
+
+# Cisco IOSv
+devices:
+# HQ_DIS1 must be 'equal' hostname on the device
+    HQ-DIS1:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.104
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-DIS2:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.105
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC1:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.100
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC2:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.101
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC3:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.102
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC4:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.3.103
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco

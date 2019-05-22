@@ -1,0 +1,23 @@
+---
+# aaa authorization exec LOCAL auto-enable
+
+- name: ASA_COMMAND
+  hosts: HQ-FW1
+  gather_facts: no
+  vars:
+    command1:
+      show version
+
+      show memory
+
+      show int ip br
+
+  tasks:
+    - asa_command:
+        commands:
+          - "{{ command1 }}"
+#          - show version
+      register: result1
+
+    - name: print data1
+      debug: var=result1

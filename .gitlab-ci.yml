@@ -1,0 +1,248 @@
+# these stages will run in this order:
+# If a job fails, then the jobs that are assigned to the next stage won’t run, rendering the pipeline as failed
+# Each task is isolated from each other. You need to use 'Artifacts' to connect tasks together.
+#
+
+# Run this task2 manually
+#  when: manual
+
+# Run this task1 only for branches
+#  only:
+#  - branches
+#
+
+stages:
+  - validate
+# TEST
+  - deploy_to_test
+  - verify_deploy_to_test
+# PROD
+  - deploy_to_prod
+  - verify_deploy_to_prod
+
+variables:
+  ANSIBLE_FORCE_COLOR: 'true'
+  ANSIBLE_TEST_HOSTS_VARS_LIMIT: --limit all
+  ANSIBLE_PROD_HOSTS_VARS_LIMIT: --limit all
+# for verify_deploy_to_test_Task2
+  PYATS_NTP_CHECK_TEST_HOSTS_VARS_LIMIT: HQ-FW1 HQ-DIS1 HQ-DIS2 HQ-AC1 HQ-AC2 HQ-AC3 HQ-AC4 HQ-SF1 HQ-CO1 BR1-AC1 HQ-ED1 VyOS-BR1-ED1 vSRX-BR2-FW1
+  PYATS_NTP_CHECK_TEST_HOSTS_NTP_SERVER: 10.255.255.2
+# for verify_deploy_to_prod_Task2
+  PYATS_NTP_CHECK_PROD_HOSTS_VARS_LIMIT: HQ-FW1 HQ-DIS1 HQ-DIS2 HQ-AC1 HQ-AC2 HQ-AC3 HQ-AC4 HQ-SF1 HQ-CO1 BR1-AC1 HQ-ED1 VyOS-BR1-ED1 vSRX-BR2-FW1
+  PYATS_NTP_CHECK_PROD_HOSTS_NTP_SERVER: 10.255.255.2
+
+# Describe the 'validate' Stage
+
+lint:
+  stage: validate
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - Syntax-check
+  script:
+    - rm -f Ansible/ansible.cfg
+    - mv Docker-runner/ansible.cfg /etc/ansible
+    - echo "===================================================="
+    - cd Ansible
+    # Modules/commit-merge
+    - echo "===================================================="
+    - echo "Checking (--syntax-check) of the 'TEST hosts' specific 'commit-merge' playbook:"
+    - ansible-playbook -i inventories/test/hosts inventories/test/Modules/commit-merge/commit-merge-final-config.yml --syntax-check
+    - echo "Checking (--syntax-check) of the 'PROD hosts' specific 'commit-merge' playbook:"
+    - ansible-playbook -i inventories/production/hosts inventories/production/Modules/commit-merge/commit-merge-final-config.yml --syntax-check
+    # TEST/Modules/*
+    - echo "===================================================="
+    - echo "Checking (--syntax-check) of the 'TEST hosts' for specific playbooks:"
+    - ansible-playbook -i inventories/test/hosts inventories/test/Modules/PING/ping.yaml --syntax-check
+    # PROD/Modules/*
+    - echo "===================================================="
+    - echo "Checking (--syntax-check) of the 'PROD hosts' for specific playbooks:"
+    - ansible-playbook -i inventories/production/hosts inventories/production/Modules/PING/ping.yaml --syntax-check
+  only:
+  - merge_requests
+
+validate_Task1:
+  stage: validate
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - GNS3
+  script:
+    - rm -f Ansible/ansible.cfg
+    - mv Docker-runner/ansible.cfg /etc/ansible
+    - echo "===================================================="
+    - echo "Ping 'TEST' devices:"
+    - cd Ansible
+    - ansible-playbook -i inventories/test/hosts inventories/test/Modules/PING/ping.yaml $ANSIBLE_TEST_HOSTS_VARS_LIMIT
+  environment:
+    name: test
+  only:
+    - merge_requests
+
+# Describe the 'deploy_to_test' Stage
+
+deploy_to_test_Task1:
+  stage: deploy_to_test
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - GNS3
+  script:
+    - rm -f Ansible/ansible.cfg
+    - mv Docker-runner/ansible.cfg /etc/ansible
+    - echo "===================================================="
+    - cd Docker-runner
+    - chmod +x ./gitlab-napalm-config-dir.sh
+    - ./gitlab-napalm-config-dir.sh
+    - cd ..
+    - echo "===================================================="
+    - echo "Commit-merge push 'FINAL.conf' for 'TEST' devices:"
+    - cd Ansible
+    - ansible-playbook -i inventories/test/hosts inventories/test/Modules/commit-merge/commit-merge-final-config.yml $ANSIBLE_TEST_HOSTS_VARS_LIMIT
+  environment:
+    name: test
+  only:
+    - merge_requests
+  artifacts:
+    paths:
+    - Ansible/inventories/test/CONFIGS/*/*.diff
+    expire_in: 1 week
+  dependencies: []
+
+# Describe the 'verify_deploy_to_test' Stage
+
+verify_deploy_to_test_Task1:
+  stage: verify_deploy_to_test
+  image: ciscotestautomation/pyats:19.0-robot
+  tags:
+    - GNS3
+  script:
+    - pip install textfsm
+    - echo "Run PyATS/Robotframework network tests for 'TEST' devices:"
+    - cd RobotFramework/inventories/test/
+    - robot pyats1.robot
+  environment:
+    name: test
+  only:
+    - merge_requests
+  artifacts:
+    when: always
+    paths:
+    - RobotFramework/inventories/test/*.html
+    expire_in: 1 week
+  dependencies: []
+
+verify_deploy_to_test_Task2:
+  stage: verify_deploy_to_test
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - GNS3
+  script:
+    - echo "Run PyATS network tests for 'TEST' devices:"
+    - cd PyATS/inventories/test/
+    - pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --archive-dir logs/ --runinfo-dir logs/ --ntp-server $PYATS_NTP_CHECK_TEST_HOSTS_NTP_SERVER --devices $PYATS_NTP_CHECK_TEST_HOSTS_VARS_LIMIT
+  environment:
+    name: test
+  only:
+    - merge_requests
+  artifacts:
+    when: always
+    paths:
+    - PyATS/inventories/test/logs/*
+    expire_in: 1 week
+  dependencies: []
+
+
+##############################################
+# Describe the 'deploy_to_prod' Stage
+
+deploy_to_prod_Task1:
+  stage: deploy_to_prod
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - PROD
+  script:
+    - rm -f Ansible/ansible.cfg
+    - mv Docker-runner/ansible.cfg /etc/ansible
+    - echo "===================================================="
+    - echo "Ping 'PROD' devices:"
+    - cd Ansible
+    - ansible-playbook -i inventories/production/hosts inventories/production/Modules/PING/ping.yaml $ANSIBLE_PROD_HOSTS_VARS_LIMIT
+  environment:
+    name: production
+  when: manual
+  only:
+    - merge_requests
+  dependencies: []
+  allow_failure: false
+
+deploy_to_prod_Task2:
+  stage: deploy_to_prod
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - PROD
+  script:
+    - rm -f Ansible/ansible.cfg
+    - mv Docker-runner/ansible.cfg /etc/ansible
+    - echo "===================================================="
+    - cd Docker-runner
+    - chmod +x ./gitlab-napalm-config-dir.sh
+    - ./gitlab-napalm-config-dir.sh
+    - cd ..
+    - echo "===================================================="
+    - echo "Commit-merge push 'FINAL.conf' for 'PROD' devices:"
+    - cd Ansible
+    - ansible-playbook -i inventories/production/hosts inventories/production/Modules/commit-merge/commit-merge-final-config.yml $ANSIBLE_PROD_HOSTS_VARS_LIMIT
+  environment:
+    name: production
+  when: manual
+  only:
+    - merge_requests
+  artifacts:
+    paths:
+    - Ansible/inventories/production/CONFIGS/*/*.diff
+    expire_in: 1 week
+  dependencies: []
+  allow_failure: false
+
+# Describe the 'verify_deploy_to_prod' Stage
+
+verify_deploy_to_prod_Task1:
+  stage: verify_deploy_to_prod
+  image: ciscotestautomation/pyats:19.0-robot
+  tags:
+    - PROD
+  script:
+    - pip install textfsm
+    - echo "Run PyATS/Robotframework network tests for 'PROD' devices:"
+    - cd RobotFramework/inventories/production/
+    - robot pyats1.robot
+  environment:
+    name: production
+  when: manual
+  only:
+    - merge_requests
+  artifacts:
+    when: always
+    paths:
+      - RobotFramework/inventories/production/*.html
+    expire_in: 1 week
+  dependencies: []
+  allow_failure: false
+
+verify_deploy_to_prod_Task2:
+  stage: verify_deploy_to_prod
+  image: networkascode/nac:ubuntu-nac-v2
+  tags:
+    - GNS3
+  script:
+    - echo "Run PyATS network tests for 'PROD' devices:"
+    - cd PyATS/inventories/production/
+    - pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --archive-dir logs/ --runinfo-dir logs/ --ntp-server $PYATS_NTP_CHECK_PROD_HOSTS_NTP_SERVER --devices $PYATS_NTP_CHECK_PROD_HOSTS_VARS_LIMIT
+  environment:
+    name: production
+  only:
+    - merge_requests
+  artifacts:
+    when: always
+    paths:
+    - PyATS/inventories/production/logs/*
+    expire_in: 1 week
+  dependencies: []

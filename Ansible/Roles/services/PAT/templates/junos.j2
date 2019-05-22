@@ -1,0 +1,21 @@
+    nat {
+        source {
+            rule-set {{ name_nat_rules_set }} {
+                from zone {{ nat_from_zone }};
+                to zone {{ nat_to_zone }};
+{% for ruleset in nat_rules_set %}
+                rule {{ ruleset.rule_name }} {
+                    match {
+                        source-address {{ ruleset.source_net }};
+                        destination-address {{ ruleset.dest_net }};
+                    }
+                    then {
+                        source-nat {
+                            interface;
+                        }
+                    }
+                }
+{% endfor %}
+            }
+        }
+    }

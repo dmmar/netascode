@@ -1,0 +1,5 @@
+---
+
+- name: generate ospfv2-routing from templates (Cisco)
+  when: inventory_hostname in groups['OSPFv2-Domain']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/ospfv2-routing.conf

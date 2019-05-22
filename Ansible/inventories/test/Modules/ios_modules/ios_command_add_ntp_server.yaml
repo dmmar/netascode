@@ -1,0 +1,12 @@
+---
+- name: Sample IOS add ntp server
+  hosts: ALL
+  gather_facts: no
+
+  tasks:
+
+  - name: Add NTP server
+    ios_command:
+      commands:
+        - conf t
+        - ntp server 1.1.1.1

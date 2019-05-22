@@ -1,0 +1,42 @@
+!
+crypto ikev1 enable {{ ikev1_enab_int }}
+{% for ike1_policy in ikev1_policies %}
+crypto ikev1 policy {{ ike1_policy.number }}
+ encryption {{ ike1_policy.encr }}
+ hash {{ ike1_policy.hash }}
+ authentication {{ ike1_policy.auth }}
+ group {{ ike1_policy.dh_group }}
+ lifetime {{ ike1_policy.lifetime }}
+{% endfor %}
+!
+{% for group in tunnel_groups %}
+tunnel-group {{ group.remote_ip }} type {{ group.type }}
+tunnel-group {{ group.remote_ip }} ipsec-attributes
+ ikev1 pre-shared-key {{ group.shared_key }}
+{% endfor %}
+!
+{% for set in transform_sets %}
+crypto ipsec {{ set.ike_ver }} transform-set {{ set.ike_name }} {{ set.esp_enc }} {{ set.esp_auth }}
+{% endfor %}
+!
+{% for profile in ipsec_profiles %}
+crypto ipsec profile {{ profile.name }}
+ set ikev1 transform-set {{ profile.trans_set }}
+ set security-association lifetime seconds {{ profile.lifetime }}
+ set pfs {{ profile.pfs }}
+{% endfor %}
+!
+{% for tun_int in tun_ints %}
+interface {{ tun_int.int }}
+ nameif {{ tun_int.nameif }}
+ ip address {{ tun_int.ip_address }}
+ tunnel source interface {{ tun_int.source_int }}
+ tunnel destination {{ tun_int.dest_ip }}
+ tunnel mode {{ tun_int.tunnel_mode }}
+ tunnel protection ipsec profile {{ tun_int.prot_profile }}
+!
+{% endfor %}
+{% for route in tunnel_routes %}
+route {{ route.tun_nameif }} {{ route.remote_net }} {{ route.tun_ip }} {{ route.tun_ad }}
+{% endfor %}
+!

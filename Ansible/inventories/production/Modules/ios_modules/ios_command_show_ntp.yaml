@@ -1,0 +1,37 @@
+#simple IOS config in ansible
+---
+- name: Sample IOS show ntp for Ansible 2.5
+  hosts: ALL
+  gather_facts: yes
+
+  tasks:
+
+  - name: run show ntp associations
+    ios_command:
+      commands:
+        - show ntp associations
+    register: myntp1
+
+  - name: display value of "myntp1" variable
+    debug:
+      var: myntp1["stdout_lines"][0]
+
+  - name: run show ntp status
+    ios_command:
+      commands:
+      - show ntp status
+    register: myntp2
+
+  - name: display value of "myntp2" variable
+    debug:
+      var: myntp2["stdout_lines"][0]
+
+  - name: run show clock
+    ios_command:
+      commands:
+      - show clock
+    register: myntp3
+
+  - name: display value of "myntp3" variable
+    debug:
+      var: myntp3["stdout_lines"][0]

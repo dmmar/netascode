@@ -1,0 +1,1 @@
+pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --ntp-server 10.255.255.2 --devices HQ-FW1 HQ-FW1 vSRX-BR2-FW1 VyOS-BR1-ED1 HQ-ED1 HQ-CO1 --archive-dir logs/ --runinfo-dir logs/

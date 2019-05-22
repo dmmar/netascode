@@ -1,0 +1,20 @@
+interfaces {
+{% for iface in interfaces_dummy %}
+   dummy {{ iface.name }} {
+       address {{ iface.ip }}
+   }
+{% endfor %}
+{% for iface in interfaces_ethernet %}
+   ethernet {{ iface.name }} {
+       address {{ iface.ip }}
+       description {{ iface.description }}
+   }
+{% endfor %}
+{% for node in groups['VyOS-IPsec'] %}
+{% for iface in interfaces_vti %}
+   vti {{ iface.name }} {
+       address {{ iface.ip }}
+   }
+{% endfor %}
+{% endfor %}
+}

@@ -1,0 +1,21 @@
+interfaces {
+{% for iface in interfaces %}
+    {{ iface.name }} {
+        description {{ iface.description }};
+        unit 0 {
+          	family inet {
+                address {{iface.ip}};
+          	}
+        }
+    }
+{% endfor %}
+{% for node in groups['JunOS-IPsec'] %}
+{% for iface in interfaces_st %}
+   {{ iface.name }} {
+       unit 0 {
+           family inet;
+       }
+{% endfor %}
+   }
+{% endfor %}
+}

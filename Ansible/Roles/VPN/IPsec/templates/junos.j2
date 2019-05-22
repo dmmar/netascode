@@ -1,0 +1,59 @@
+security {
+    ike {
+{% for ike in ike_proposals %}
+        proposal {{ ike.proposal }} {
+            authentication-method {{ ike.auth_met }};
+            dh-group {{ ike.dh_group }};
+            authentication-algorithm {{ ike.auth_alg }};
+            encryption-algorithm {{ ike.encr_alg }};
+            lifetime-seconds {{ ike.lifetime }};
+        }
+{% endfor %}
+{% for ike in ike_policies %}
+        policy {{ ike.policy }} {
+            mode {{ ike.mode }};
+            proposals {{ ike.proposal }};
+            pre-shared-key ascii-text {{ ike.shared_key }}; ## SECRET-DATA
+        }
+{% endfor %}
+{% for ike in ike_gateway %}
+        gateway {{ ike.gw_name }} {
+            ike-policy {{ ike.policy }};
+            address {{ ike.remote_ip }};
+            external-interface {{ ike.exter_int }};
+        }
+{% endfor %}
+    }
+    ipsec {
+{% for ipsec in ipsec_proposals %}
+        proposal {{ ipsec.proposal }} {
+            protocol {{ ipsec.proto }};
+            authentication-algorithm {{ ipsec.auth_alg }};
+            encryption-algorithm {{ ipsec.encr_alg }};
+            lifetime-seconds {{ ipsec.lifetime }};
+        }
+{% endfor %}
+{% for ipsec in ipsec_policies %}
+        policy {{ ipsec.policy }} {
+            perfect-forward-secrecy {
+                keys {{ ipsec.dh_group }};
+            }
+            proposals {{ ipsec.proposal }};
+        }
+{% endfor %}
+{% for ipsec in ipsec_vpns %}
+        vpn {{ ipsec.vpn_name }} {
+            bind-interface {{ ipsec.bind_int }};
+            ike {
+                gateway {{ ipsec.gw_name }};
+                proxy-identity {
+                    local {{ ipsec.local_net }};
+                    remote {{ ipsec.remote_net }};
+                    service {{ ipsec.service }};
+                }
+                ipsec-policy {{ ipsec.policy }};
+            }
+            establish-tunnels {{ ipsec.estab_tunn }};
+        }
+{% endfor %}
+    }

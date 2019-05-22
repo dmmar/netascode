@@ -1,0 +1,5 @@
+---
+
+- name: generate vlans from templates
+  when: inventory_hostname in groups['switches']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/3_vlans.conf

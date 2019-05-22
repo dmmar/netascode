@@ -1,0 +1,37 @@
+---
+- name: Rollback to previous configuration (step back)
+  hosts: ALL
+  gather_facts: no
+
+  tasks:
+    # VyOS will make rollback and then reboot the system
+  - name: VyOS Rollback
+    when: inventory_hostname in groups['VyOS']
+    vyos_command:
+      commands:
+        - command: configure
+        - command: rollback 1
+          prompt: '[confirm]'
+          answer: "\r"
+  - name: JunOS Rollback
+    when: inventory_hostname in groups['JunOS']
+    junos_command:
+      commands:
+        - edit
+        - rollback 1
+        - commit
+  - name: Cisco IOS Rollback
+    when: inventory_hostname in groups['Cisco'] and inventory_hostname != 'HQ-FW1'
+    ios_command:
+      commands:
+        - configure replace flash:rollback_config.txt force
+        - wr
+  # Cisco ASA will make rollback and then reboot the system
+  # ASA must have 'rollback_config.txt' on the flash
+  - name: Cisco ASA Rollback
+    when: inventory_hostname in groups['Cisco-ASA']
+    asa_command:
+      commands:
+        - copy /noconfirm flash:/rollback_config.txt startup-config
+        - reload noconfirm
+

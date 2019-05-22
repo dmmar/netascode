@@ -1,0 +1,9 @@
+{% for pool in dhcp_pools %}
+ip dhcp pool {{ pool.name }}
+ network {{ pool.network }}
+ default-router {{ pool.gateway }}
+ dns-server {{ pool.dns }}
+ domain-name {{ pool.domain }}
+ lease {{ pool.lease }}
+!
+{% endfor %}

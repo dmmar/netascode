@@ -1,0 +1,14 @@
+!
+router ospf {{ ospf_proccess }}
+ router-id {{ router_id }}
+ passive-interface default
+{% for no_passive in no_passive_ints %}
+ no passive-interface {{ no_passive.int }}
+{% endfor %}
+{% for network in networks %}
+ network {{ network.net }}
+{% endfor %}
+{% if (inventory_hostname == "HQ-ED1") %}
+ default-information originate
+!
+{% endif %}

@@ -1,0 +1,18 @@
+{% for iface in interfaces_l2_channel %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ channel-group {{ iface.po_number }} mode {{ iface.po_mode }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+{% for iface in interfaces_po %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ {{ trunk_encapsulation }}
+ switchport mode {{ iface.mode }}
+ {{ iface.dtp }}
+ {{ iface.shutdown }}
+!
+{% endfor %}

@@ -1,0 +1,7 @@
+!
+router ospf {{ ospf_proccess }}
+ router-id {{ router_id }}
+{% for network in networks %}
+ network {{ network.net }}
+{% endfor %}
+!

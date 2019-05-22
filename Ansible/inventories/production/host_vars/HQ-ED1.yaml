@@ -1,0 +1,119 @@
+# HQ-ED1
+
+# Connection variables
+
+ansible_user: 'cisco'
+ansible_ssh_pass: 'cisco'
+ansible_connection: network_cli
+ansible_network_os: ios
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: False
+
+# for napalm_install_config (Modules)
+#config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/production/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: HQ-ED1
+
+timezone: NZDT 13 0
+ntp_server: 10.255.255.2
+
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'GigabitEthernet0/0'
+
+int_gi1: 'GigabitEthernet0/1'
+int_gi2: 'GigabitEthernet0/2'
+int_gi3: 'GigabitEthernet0/3'
+
+int_gi4: 'GigabitEthernet1/0'
+int_gi5: 'GigabitEthernet1/1'
+int_gi6: 'GigabitEthernet1/2'
+int_gi7: 'GigabitEthernet1/3'
+
+int_gi8: 'GigabitEthernet2/0'
+int_gi9: 'GigabitEthernet2/1'
+int_gi10: 'GigabitEthernet2/2'
+int_gi11: 'GigabitEthernet2/3'
+
+int_gi12: 'GigabitEthernet3/0'
+int_gi13: 'GigabitEthernet3/1'
+int_gi14: 'GigabitEthernet3/2'
+int_gi15: 'GigabitEthernet3/3'
+
+int_lo0: 'Loopback0'
+int_lo50: 'Loopback50'
+
+# Interfaces-j2
+
+interfaces:
+  - name: "{{ int_lo0 }}"
+    description: "OSPF RID"
+    ip: 169.254.255.5 255.255.255.255
+    shutdown:
+  - name: "{{ int_lo50 }}"
+    description: "OSPF AREA 50 NET1"
+    ip: 10.255.50.1 255.255.255.0
+    shutdown:
+  - name: "{{ int_gi1 }}"
+    description: "TO-ISP"
+    ip: 1.1.1.2 255.255.255.252
+    shutdown:
+  - name: "{{ int_gi2 }}"
+    description: "TO-HQ-FW1"
+    ip: 10.255.0.1 255.255.255.252
+    shutdown:
+
+###########
+# Routing #
+###########
+
+# Static
+
+isp_ip: 1.1.1.1
+default_route: 0.0.0.0 0.0.0.0 {{ isp_ip }}
+
+# Dynamic
+## OSPFv2
+### Area 50 and 0
+
+ospf_proccess: 1
+router_id: 169.254.255.5
+# passive-interface default
+no_passive_ints:
+  - int: "{{ int_gi2 }}"
+networks:
+  - net: 10.255.0.0 0.0.0.3 area 50
+  - net: 10.255.50.0 0.0.0.255 area 50
+
+########
+# PAT  #
+########
+
+acl_name_pat: ACL_PAT_HQ-DEPARTMENTS
+acl_pat_strings:
+    - remark: HQ VLAN 10
+      string: permit ip 10.255.100.0 0.0.0.31 any
+    - remark: HQ VLAN 20
+      string: permit ip 10.255.100.32 0.0.0.31 any
+    - remark: HQ VLAN 30
+      string: permit ip 10.255.100.64 0.0.0.31 any
+    - remark: HQ VLAN 40
+      string: permit ip 10.255.100.96 0.0.0.31 any
+
+int_nat_outside: "{{ int_gi1 }}"
+int_nat_inside: "{{ int_gi2 }}"

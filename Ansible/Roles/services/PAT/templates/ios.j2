@@ -1,0 +1,13 @@
+!
+ip access-list extended {{ acl_name_pat }}
+{% for strings in acl_pat_strings %}
+ remark {{ strings.remark }}
+ {{ strings.string }}
+{% endfor %}
+!
+interface {{ int_nat_outside }}
+ ip nat outside
+interface {{ int_nat_inside }}
+ ip nat inside
+!
+ip nat inside source list {{ acl_name_pat }} interface {{ int_nat_outside }} overload

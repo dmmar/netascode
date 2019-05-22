@@ -1,0 +1,10 @@
+{% for iface in interface_l2_to_l3 %}
+!
+interface {{ iface.name }}
+ no switchport
+ description {{ iface.description }}
+ ip address {{ iface.ip }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+

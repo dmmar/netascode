@@ -1,0 +1,63 @@
+---
+- name: Generate all config
+  hosts: ALL
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python"
+
+  pre_tasks:
+    - name: remove potentially existing previous folder for candidate config
+      file: path={{config_dir}}/{{inventory_hostname}} state=absent
+    - name: create candidate config directory (if it does not exist)
+      file: path={{config_dir}}/{{inventory_hostname}} state=directory
+
+  roles:
+    - basic_config
+    - stp
+    - vlans
+    - interfaces
+    - interfaces_vlans
+    - ZBF
+    - role: FHRP/glbp
+    - role: routing/static
+    - role: routing/ospfv2
+    - role: services/DHCP
+    - role: services/ACL
+    - role: services/PAT
+    - role: VPN/IPsec
+
+  post_tasks:
+    - name: Append templates together to create 'FINAL_pre.conf' configuration file
+      assemble:
+        src: "{{ config_dir }}/{{ inventory_hostname }}"
+        dest: "{{ config_dir }}/{{ inventory_hostname }}/FINAL_pre.conf"
+    - name: Make diff of running-config and 'FINAL_pre.conf' configuration with NAPALM (do NOT execute 'FINAL.conf' config)
+      when: inventory_hostname not in groups['Cisco-ASA']
+      napalm_install_config:
+        optional_args: {'global_delay_factor': 1}
+        hostname: "{{ ansible_host }}"
+        username: "{{ ansible_user }}"
+        dev_os: "{{ ansible_network_os }}"
+        password: "{{ ansible_ssh_pass }}"
+        config_file: "{{ config_dir }}/{{ inventory_hostname }}/FINAL_pre.conf"
+        commit_changes: "{{ commit_changes }}"
+        replace_config: "{{ replace_config }}"
+        diff_file: "{{ config_dir }}/{{ inventory_hostname }}/FINAL_pre_DIFF.conf"
+# Next for Cisco IOS Only
+    - name: Copying 'FINAL_pre_DIFF.conf' file to 'FINAL.conf'
+      when: inventory_hostname in groups['Cisco'] and inventory_hostname not in groups['Cisco-ASA']
+      copy:
+        src: "{{ config_dir }}/{{ inventory_hostname }}/FINAL_pre_DIFF.conf"
+        dest: "{{ config_dir }}/{{ inventory_hostname }}/FINAL.conf"
+    - name: Ansible will delete all ' + ' in 'FINAL.conf'
+      when: inventory_hostname in groups['Cisco'] and inventory_hostname not in groups['Cisco-ASA']
+      replace:
+        path: "{{ config_dir }}/{{ inventory_hostname }}/FINAL.conf"
+        regexp: '^\+'
+        replace: ""
+    - name: Ansible will delete all ' - ' in 'FINAL.conf'
+      when: inventory_hostname in groups['Cisco'] and inventory_hostname not in groups['Cisco-ASA']
+      replace:
+        path: "{{ config_dir }}/{{ inventory_hostname }}/FINAL.conf"
+        regexp: '^\-'
+        replace: ""

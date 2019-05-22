@@ -1,0 +1,9 @@
+!
+{{ vtp_mode }}
+!
+{% for vlan in vlans %}
+!
+vlan {{ vlan.vlan_number }}
+ name {{ vlan.vlan_name }}
+!
+{% endfor %}

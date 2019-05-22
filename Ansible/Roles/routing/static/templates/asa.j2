@@ -1,0 +1,5 @@
+!
+{% for s_route in s_routes %}
+route {{ s_route.int }} {{ s_route.route }} {{ s_route.next_hop }} {{ s_route.metric }}
+{% endfor %}
+!

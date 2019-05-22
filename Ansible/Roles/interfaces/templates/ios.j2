@@ -1,0 +1,9 @@
+{% for iface in interfaces %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ ip address {{ iface.ip }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+

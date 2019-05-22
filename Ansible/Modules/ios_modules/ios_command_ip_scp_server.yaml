@@ -1,0 +1,13 @@
+---
+- name: Enable SCP server on Devices for NAPALM
+  hosts: ALL
+  gather_facts: no
+
+  tasks:
+
+  - name: Enable SCP Server
+    ios_command:
+      commands:
+        - conf t
+        - ip scp server enable
+        - do wr

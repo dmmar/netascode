@@ -1,0 +1,158 @@
+# Example
+# -------
+#
+#   an example testbed file - testbed.yaml
+
+testbed:
+    name: Testbed
+
+# Cisco IOSv
+devices:
+# HQ_DIS1 must be 'equal' hostname on the device
+    HQ-DIS1:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.104
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-DIS2:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.105
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC1:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.100
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC2:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.101
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC3:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.102
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-AC4:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.103
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-CO1:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.106
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-SF1:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.107
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    HQ-ED1:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.109
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+    BR1-AC1:
+        os: ios
+        type: IOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.112
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+# Cisco ASAv
+    HQ-FW1:
+        os: asa
+        type: ASA
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.108
+                command: 'ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 cisco@192.168.4.108'
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+# VyOS
+    VyOS-BR1-ED1:
+        os: linux
+        type: VYOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.111
+        tacacs:
+            username: vyos
+        passwords:
+            linux: vyos
+# JunOS
+    vSRX-BR2-FW1:
+        os: linux
+        type: JUNOS
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.113
+        tacacs:
+            username: cisco
+        passwords:
+            linux: Pa$$w0rd

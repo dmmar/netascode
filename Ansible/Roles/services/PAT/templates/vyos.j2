@@ -1,0 +1,17 @@
+nat {
+    source {
+{% for rule in nat_rules %}
+        rule {{ rule.rule_number }} {
+            description {{ rule.desc_rule }}
+            outbound-interface {{ rule.outbound_int }}
+            protocol {{ rule.protocol }}
+            source {
+                address {{ rule.source_net }}
+            }
+            translation {
+                address {{ rule.translation }}
+            }
+        }
+{% endfor %}
+    }
+}

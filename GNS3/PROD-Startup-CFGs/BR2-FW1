@@ -1,0 +1,23 @@
+edit
+
+set system root-authentication plain-text-password
+
+set system host-name vSRX-BR2-FW1
+
+set interfaces fxp0 unit 0 family inet address 192.168.2.113/24
+
+set system services ssh authentication-order password
+
+set system services ssh protocol-version v2
+
+set system login user cisco class super-user authentication plain-text-password
+
+set routing-instances mgmt_junos description MGMT_ONLY
+
+set system management-instance
+
+set routing-instances mgmt_junos routing-options static route 0.0.0.0/0 next-hop 192.168.2.254
+
+commit check
+
+commit

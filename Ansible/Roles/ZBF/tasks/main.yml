@@ -1,0 +1,8 @@
+---
+
+- name: generate ZBF-config from templates (JunOS)
+  when: inventory_hostname in groups['ZBF']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/8_zbf-config.conf
+- name: generate Security-policies-config from templates (JunOS)
+  when: inventory_hostname in groups['JunOS-SEC-POL']
+  template: src=../templates/{{ansible_network_os}}_policies.j2 dest={{config_dir}}/{{inventory_hostname}}/7_sec-policies-config.conf

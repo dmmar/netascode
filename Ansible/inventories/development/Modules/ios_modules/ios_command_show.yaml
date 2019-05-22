@@ -1,0 +1,46 @@
+#simple IOS config in ansible
+---
+- name: Sample IOS show version for Ansible 2.5  # The name of 'Play'
+  hosts: ALL # The group of hosts
+  gather_facts: no
+
+  tasks:
+
+  - name: GATHERING FACTS # The name of 'Task'
+    ios_facts: # The Network module name
+      gather_subset: hardware # 'gather_subnet' - The Parameter of Network module. 'hardware' - The Possible value
+
+  - name: display current IOS version
+    debug:
+      var: ansible_net_version
+
+  - name: The image file the device is running
+    debug:
+      var: ansible_net_image
+
+  - name: The model name returned from the device
+    debug:
+      var: ansible_net_model
+
+  - name: The serial number of the remote device
+    debug:
+      var: ansible_net_serialnum
+
+#  - name: run show ip int brief
+#    ios_command:
+#      commands: show ip interface brief
+#    register: myint
+#
+#  - name: display value of "myint" variable
+#    debug:
+#      var: myint["stdout_lines"][0]
+#
+#  - name: run show users
+#    ios_command:
+#      commands: show users
+#    register: shuser
+#
+#  - name: display value of "shuser" variable
+#    debug:
+#      var: shuser["stdout_lines"][0]
+

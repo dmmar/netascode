@@ -1,0 +1,13 @@
+---
+- name: Generate basic-config
+  hosts: ALL
+  gather_facts: no
+
+  pre_tasks:
+    - name: remove potentially existing previous candidate config (BASIC-CONFIG)
+      file: path={{config_dir}}/{{inventory_hostname}}/1_basic-config.conf state=absent
+    - name: create candidate config directory (if it does not exist)
+      file: path={{config_dir}}/{{inventory_hostname}} state=directory
+
+  roles:
+    - basic_config

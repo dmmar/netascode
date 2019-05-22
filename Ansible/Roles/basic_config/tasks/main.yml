@@ -1,0 +1,4 @@
+---
+
+- name: generate basic-config from templates
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/1_basic-config.conf

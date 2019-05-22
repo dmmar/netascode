@@ -1,0 +1,5 @@
+---
+
+- name: generate static-routing from templates (Cisco, JunOS, VyOS)
+  when: inventory_hostname in groups['STATIC-Domain']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/9_static-routing.conf

@@ -1,0 +1,8 @@
+{% for iface in interfaces_ROTS %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+

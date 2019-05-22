@@ -1,0 +1,58 @@
+# Example
+# -------
+#
+#   an example testbed file - testbed.yaml
+
+testbed:
+    name: Testbed
+
+# Cisco IOSv
+devices:
+    ISP:
+        os: ios
+        type: IOSv
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.110
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+# Cisco ASAv
+    HQ-FW1:
+        os: asa
+        type: asav
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.108
+                command: 'ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 cisco@192.168.4.108'
+        tacacs:
+            username: cisco
+        passwords:
+            tacacs: cisco
+# Juniper vSRX
+    vSRX-BR2-FW1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.113
+        tacacs:
+            username: cisco
+        passwords:
+            linux: Pa$$w0rd
+# VyOS
+    VyOS-BR1-ED1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: ssh
+                ip: 192.168.4.111
+        tacacs:
+            username: vyos
+        passwords:
+            linux: vyos

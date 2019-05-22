@@ -1,0 +1,15 @@
+routing-options {
+    static {
+    {% for s_route in s_routes %}
+    route {{ s_route.route }} {
+            next-hop {{ s_route.next_hop }};
+            metric {{ s_route.metric }};
+    {% endfor %}
+    }
+{% for node in groups['JunOS-IPsec'] %}
+{% for route in ipsec_routes %}
+        {{ route.ipsec_route }};
+{% endfor %}
+{% endfor %}
+    }
+}

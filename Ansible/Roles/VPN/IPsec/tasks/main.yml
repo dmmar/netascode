@@ -1,0 +1,11 @@
+---
+
+- name: generate IPsec config from templates (VyOS)
+  when: inventory_hostname in groups['VyOS-IPsec']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/8_ipsec-config.conf
+- name: generate IPsec config from templates (JunOS)
+  when: inventory_hostname in groups['JunOS-IPsec']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/5_ipsec-config.conf
+- name: generate IPsec config from templates (Cisco ASA)
+  when: inventory_hostname in groups['Cisco-ASA-IPsec']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/5_ipsec-config.conf

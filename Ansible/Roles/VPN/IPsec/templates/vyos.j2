@@ -1,0 +1,51 @@
+vpn {
+    ipsec {
+{% for esp_gp in esp_groups %}
+        esp-group {{ esp_gp.esp_gp_name }} {
+            lifetime {{ esp_gp.lifetime }}
+            mode {{ esp_gp.mode }}
+            pfs {{ esp_gp.pfs }}
+            proposal {{ esp_gp.prop_number }} {
+                encryption {{ esp_gp.encryption }}
+                hash {{ esp_gp.hash }}
+            }
+        }
+{% endfor %}
+{% for ike_gp in ike_groups %}
+        ike-group {{ ike_gp.ike_gp_name }} {
+            key-exchange {{ ike_gp.ike_version }}
+            lifetime {{ ike_gp.lifetime }}
+            proposal {{ ike_gp.prop_number }} {
+                dh-group {{ ike_gp.pfs }}
+                encryption {{ ike_gp.encryption }}
+                hash {{ ike_gp.hash }}
+            }
+        }
+{% endfor %}
+        ipsec-interfaces {
+{% for ipsec_int in ipsec_ints %}
+            interface {{ ipsec_int.int }}
+{% endfor %}
+        }
+        site-to-site {
+{% for peer in s2s_peers %}
+            peer {{ peer.peer_ip }} {
+                authentication {
+                    id {{ peer.local_wan_ip }}
+                    mode {{ peer.mode }}
+                    pre-shared-secret {{ peer.shared_secret }}
+                    remote-id {{ peer.remote_ip }}
+                }
+                connection-type {{ peer.conn_type }}
+                default-esp-group {{ peer.esp_group }}
+                ike-group {{ peer.ike_group }}
+                local-address {{ peer.local_ip }}
+                vti {
+                    bind {{ peer.vti_int }}
+                    esp-group {{ peer.vti_esp_gp }}
+                }
+            }
+{% endfor %}
+        }
+    }
+}

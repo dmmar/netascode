@@ -1,0 +1,123 @@
+# BR1-AC1
+
+# Connection variables
+
+ansible_user: 'cisco'
+ansible_ssh_pass: 'cisco'
+ansible_connection: network_cli
+ansible_network_os: ios
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: False
+
+# for napalm_install_config (Modules)
+#config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/production/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: BR1-AC1
+
+timezone: NZDT 13 0
+ntp_server: 10.255.255.2
+
+#########
+#  STP  #
+#########
+
+stp_mode: rapid-pvst
+
+# BR1-AC1 - ROOT
+
+# stp(ios.j2)
+
+stp_vlan:
+  - vlan_number: 1
+    vlan_priority: 0
+
+#########
+#  VTP  #
+#########
+
+vtp_mode: vtp mode off
+
+#########
+# VLANS #
+#########
+
+# vlans-j2
+
+vlans:
+  - vlan_number: 1
+    vlan_name: default
+
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'GigabitEthernet0/0'
+
+int_gi1: 'GigabitEthernet0/1'
+int_gi2: 'GigabitEthernet0/2'
+int_gi3: 'GigabitEthernet0/3'
+
+int_gi4: 'GigabitEthernet1/0'
+int_gi5: 'GigabitEthernet1/1'
+int_gi6: 'GigabitEthernet1/2'
+int_gi7: 'GigabitEthernet1/3'
+
+int_gi8: 'GigabitEthernet2/0'
+int_gi9: 'GigabitEthernet2/1'
+int_gi10: 'GigabitEthernet2/2'
+int_gi11: 'GigabitEthernet2/3'
+
+int_gi12: 'GigabitEthernet3/0'
+int_gi13: 'GigabitEthernet3/1'
+int_gi14: 'GigabitEthernet3/2'
+int_gi15: 'GigabitEthernet3/3'
+
+int_vlan1: 'Vlan1'
+
+trunk_encapsulation: switchport trunk encapsulation dot1q
+
+# Interfaces-j2
+
+interfaces:
+  - name: "{{ int_vlan1 }}"
+    description: "VLAN 1"
+    ip: 10.1.100.30 255.255.255.224
+    shutdown:
+
+# Interfaces-j2(ios_trunk.j2)
+
+interfaces_trunk:
+  - name: "{{ int_gi2 }}"
+    description: "TO_BR1-ED1"
+    dtp: switchport nonegotiate
+    shutdown:
+
+# Interfaces-j2(ios_access.j2)
+
+interfaces_access:
+  - name: "{{ int_gi1 }}"
+    description: "TO_BR1-C1"
+    vlan: 1
+    shutdown:
+    portfast: portfast edge
+    bpduguard: enable
+  - name: "{{ int_gi3 }}"
+    description: "Empty client"
+    vlan: 1
+    shutdown:
+    portfast: portfast edge
+    bpduguard: enable
+

@@ -1,0 +1,136 @@
+# Company 'X' MGMT NETWORK 192.168.4.0/24
+# [_DEV_]
+# GNS3 Virtual Devices
+
+[ALL]
+ISP ansible_host=192.168.4.110
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+VyOS-BR1-ED1 ansible_host=192.168.4.111
+BR1-AC1 ansible_host=192.168.4.112
+HQ-ED1 ansible_host=192.168.4.109
+HQ-FW1 ansible_host=192.168.4.108
+HQ-CO1 ansible_host=192.168.4.106
+HQ-SF1 ansible_host=192.168.4.107
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+HQ-AC1 ansible_host=192.168.4.100
+HQ-AC2 ansible_host=192.168.4.101
+HQ-AC3 ansible_host=192.168.4.102
+HQ-AC4 ansible_host=192.168.4.103
+
+[Cisco]
+ISP ansible_host=192.168.4.110
+BR1-AC1 ansible_host=192.168.4.112
+HQ-ED1 ansible_host=192.168.4.109
+HQ-FW1 ansible_host=192.168.4.108
+HQ-CO1 ansible_host=192.168.4.106
+HQ-SF1 ansible_host=192.168.4.107
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+HQ-AC1 ansible_host=192.168.4.100
+HQ-AC2 ansible_host=192.168.4.101
+HQ-AC3 ansible_host=192.168.4.102
+HQ-AC4 ansible_host=192.168.4.103
+
+[Cisco-ASA]
+HQ-FW1 ansible_host=192.168.4.108
+
+[JunOS]
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+
+[VyOS]
+VyOS-BR1-ED1 ansible_host=192.168.4.111
+
+############################
+# GROUPS FOR ANSIBLE ROLES #
+############################
+
+[routers-ROTS]
+# If routers have ROTS interfaces for Role (INTERFACES) - ios_ROTS.j2
+
+[routers-interfaces_vlans]
+# If routers have vlans interfaces (eg. int gi 0/0.10) for Role (INTERFACES_VLANS)
+
+[L3-switches]
+# for Role (INTERFACES) - ios_l2_to_l3.j2 (from l2 to l3)
+HQ-CO1 ansible_host=192.168.4.106
+HQ-SF1 ansible_host=192.168.4.107
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+
+[switches]
+# for Roles (VLANS and TRUNKS)
+BR1-AC1 ansible_host=192.168.4.112
+HQ-AC1 ansible_host=192.168.4.100
+HQ-AC2 ansible_host=192.168.4.101
+HQ-AC3 ansible_host=192.168.4.102
+HQ-AC4 ansible_host=192.168.4.103
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+
+[access_switches]
+# for Role (INTERFACES) - ios_access.j2
+BR1-AC1 ansible_host=192.168.4.112
+HQ-AC1 ansible_host=192.168.4.100
+HQ-AC2 ansible_host=192.168.4.101
+HQ-AC3 ansible_host=192.168.4.102
+HQ-AC4 ansible_host=192.168.4.103
+
+[po_switches]
+# for Role (INTERFACES) - ios_l2_channel.j2
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+
+[GLBP]
+# for Role (FHRP\GLBP) - ios.j2
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+
+[OSPFv2-Domain]
+# for Role (ROUTING\OSPFv2)
+HQ-DIS1 ansible_host=192.168.4.104
+HQ-DIS2 ansible_host=192.168.4.105
+HQ-CO1 ansible_host=192.168.4.106
+HQ-SF1 ansible_host=192.168.4.107
+HQ-FW1 ansible_host=192.168.4.108
+HQ-ED1 ansible_host=192.168.4.109
+
+[STATIC-Domain]
+# for Role (ROUTING\STATIC)
+HQ-ED1 ansible_host=192.168.4.109
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+VyOS-BR1-ED1 ansible_host=192.168.4.111
+HQ-FW1 ansible_host=192.168.4.108
+
+[DHCP-Servers]
+# for Role (SERVICES\DHCP)
+
+[PAT]
+# for Role (SERVICES\PAT)
+HQ-ED1 ansible_host=192.168.4.109
+VyOS-BR1-ED1 ansible_host=192.168.4.111
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+
+[ZBF]
+# for Role (ZBF)
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+
+[VyOS-IPsec]
+# for Role (VPN\IPsec)
+VyOS-BR1-ED1 ansible_host=192.168.4.111
+
+[JunOS-IPsec]
+# for Role (VPN\IPsec)
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+
+[JunOS-SEC-POL]
+# for Role (ZBF) - junos_policies.j2
+vSRX-BR2-FW1 ansible_host=192.168.4.113
+
+[Cisco-ASA-IPsec]
+# for Role (VPN\IPsec)
+HQ-FW1 ansible_host=192.168.4.108
+
+[ACL]
+# for Role (services\ACL)
+HQ-FW1 ansible_host=192.168.4.108

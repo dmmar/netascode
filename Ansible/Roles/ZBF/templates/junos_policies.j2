@@ -1,0 +1,40 @@
+    policies {
+        from-zone trust to-zone trust {
+            policy default-permit {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        from-zone trust to-zone untrust {
+            policy default-permit {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+{% for policy in sec_policies %}
+        from-zone {{ policy.from_zone }} to-zone {{ policy.to_zone }} {
+            policy {{ policy.policy_name }} {
+                match {
+                    source-address {{ policy.source }};
+                    destination-address {{ policy.dest }};
+                    application {{ policy.app }};
+                }
+                then {
+                    {{ policy.then }};
+                }
+            }
+        }
+{% endfor %}
+    }

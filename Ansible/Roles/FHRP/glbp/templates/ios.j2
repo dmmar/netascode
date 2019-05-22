@@ -1,0 +1,9 @@
+{% for iface in interfaces_glbp %}
+!
+interface {{ iface.name }}
+ glbp {{ iface.glbp_group }} priority {{ iface.glbp_priority }}
+ {{ iface.preempt }}
+ glbp {{ iface.glbp_group }} ip {{ iface.glbp_ip }}
+ glbp {{ iface.glbp_group }} load-balancing {{ iface.glbp_load_balancing }}
+!
+{% endfor %}

@@ -1,0 +1,19 @@
+protocols {
+    static {
+{% for node in groups['VyOS-IPsec'] %}
+    {% for s_route in s_vti_routes %}
+    interface-route {{ s_route.route }} {
+            next-hop-interface {{ s_route.next_hop_int }} {
+            }
+    {% endfor %}
+    }
+{% endfor %}
+    {% for s_route in s_routes %}
+    route {{ s_route.route }} {
+            next-hop {{ s_route.next_hop }} {
+                distance {{ s_route.metric }}
+            }
+        }
+    {% endfor %}
+}
+}

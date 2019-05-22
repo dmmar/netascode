@@ -1,0 +1,37 @@
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+interface GigabitEthernet0/0
+ no switchport
+ description MGMT
+ vrf forwarding Mgmt-intf
+ ip address 192.168.4.101 255.255.255.0
+ no shut
+!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 192.168.4.254
+!
+hostname HQ-AC2
+enable secret cisco
+ip domain name nac.local
+username cisco privilege 15 secret cisco
+crypto key generate rsa label SSH_KEY modulus 2048
+ip ssh version 2
+line vty 0 4
+logging synchronous
+login local
+transport input ssh
+!
+line con 0
+logging synchronous
+!
+ip scp server enable
+!
+no ip domain lookup
+!
+do wr
+!

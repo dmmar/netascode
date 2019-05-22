@@ -1,0 +1,10 @@
+{% for iface in interfaces %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ nameif {{ iface.nameif }}
+ security-level {{ iface.security_level }}
+ ip address {{ iface.ip }}
+ {{ iface.shutdown }}
+!
+{% endfor %}

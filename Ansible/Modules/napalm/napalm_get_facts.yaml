@@ -1,0 +1,20 @@
+---
+- name: "NAPALM: GET FACTS"
+  hosts: ALL
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python"
+
+  tasks:
+
+  - name: get facts from device
+    napalm_get_facts:
+      optional_args: {'global_delay_factor': 1}
+      hostname: '{{ ansible_host }}'
+      username: '{{ ansible_user }}'
+      dev_os: '{{ ansible_network_os }}'
+      password: '{{ ansible_ssh_pass }}'
+      filter: 'facts'
+    register: result
+
+  - name: print data
+    debug: var=result

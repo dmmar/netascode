@@ -1,0 +1,24 @@
+    zones {
+{% for zone in sec_zones %}
+        security-zone {{ zone.zone_name }} {
+            address-book {
+    {% for address in zone.address_books %}
+            address {{ address.address }};
+    {% endfor %}
+        }
+            host-inbound-traffic {
+                system-services {
+    {% for service in zone.services_zone %}
+                {{ service.service }};
+    {% endfor %}
+            }
+            }
+            interfaces {
+    {% for zone_int in zone.zone_ints %}
+            {{ zone_int.int_zone }};
+    {% endfor %}
+        }
+        }
+{% endfor %}
+    }
+}

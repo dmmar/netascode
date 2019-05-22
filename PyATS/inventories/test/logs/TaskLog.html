@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LogViewer</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>job</title>
+</head>
+<style type="text/css">
+    /*************************************************/
+/* Main element styling */
+
+body,
+.side-nav.fixed,
+.side-nav.fixed .collapsible li,
+.collapsible-header {
+    background-color: #fcfcfc;
+}
+
+nav, nav .nav-wrapper i, .side-nav-head {
+    height: 50px;
+    line-height: 50px !important;
+}
+
+header, main {
+    /*padding-left: 300px;*/
+}
+.side-nav-head {
+    color: #fff;
+}
+
+main>.container {
+    padding-top: 5px;
+}
+
+main>div.row {
+    margin: 0 2rem;
+    padding-top: 1.6rem;
+}
+
+h6 { 
+  margin: 0; 
+  padding-top: 2px;
+}
+
+.container {
+  max-width: none !important;
+}
+
+.button-collapse, .page-title, .search {
+  display: inline-block;
+}
+
+.nav-title {
+    color: rgba(0, 0, 0, 0.87);
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 400;
+    height: 48px;
+    line-height: 48px;
+    padding: 5px 32px 0px 26px;
+}
+
+.log-view {
+    background-color: #f5f2f0 !important;
+    border: 1px solid #ddd;
+    font-family: monospace;
+    padding: 1rem 2rem;
+    margin-right: .5rem;
+}
+
+.data-list.row, .log-view {
+  font-size: 13px;
+}
+
+ul.data-list>li {
+  font-size: 14px;
+  margin: 1rem;
+}
+
+.data-list span {
+    margin-left: 1rem;
+}
+
+.time {
+  color: #00788a;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+.scrollToTop {
+  -webkit-transition: none !important; 
+  transition: none !important;
+}
+
+.new.badge {
+  width: 64px !important;
+  text-align: center;
+}
+
+.time.new.badge {
+  border: 1px solid #d9d9d9;
+  background-color: #f0f0f0 !important;
+  color: #737373;
+}
+
+.nav-info {
+  color: white;
+  display: flex;
+  float: right;
+}
+
+.nav-info div {
+  margin-right: 2rem;
+}
+
+.nav-info span:not(.badge) {
+  display: block;
+  height: 20px;
+  line-height: 30px;
+}
+
+.nav-info span.badge.new {
+  border: 1px solid #ffffff;
+  background-color: white !important;
+  font-weight: 700;
+  margin-top: 13.5px;
+}
+
+.toggle-data {
+  border: 1px solid #ddd;  
+  border-radius: 2px;
+  color: #737373;
+  font-size: .75rem;
+  line-height: 20px;
+  margin-left: 2rem;
+  margin-bottom: 0.3rem;
+  padding: .1rem .8rem;  
+  opacity: 0;
+  visibility: hidden;
+  transition: .1s all ease-in-out;
+}
+
+.toggle-data+.toggle-data {
+  margin-left: .5rem;
+}
+
+.toggle-data:hover {
+  background-color: #f0f0f0;
+}
+
+.editor {
+  max-height: 700px;
+  margin: 0;
+}
+
+.overview {
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+
+.overview table {
+  width: auto;
+}
+
+.overview table td {
+  padding: 6px 5px !important;
+}
+
+.overview table tr td:first-child {
+  min-width: 100px;
+}
+
+
+
+/*************************************************/
+/* Sidenav overrides */
+
+.side-nav {
+  width: 450px;
+}
+
+.side-nav-head span {
+  margin-left: 1.9rem;
+}
+
+.side-nav span.name {
+    width: 275px !important;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.side-nav .collapsible-header,
+.side-nav.fixed .collapsible-header {
+    overflow: hidden;
+    padding-left: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.side-nav .collapsible-header i,
+.side-nav.fixed .collapsible-header i {
+    margin-right: 15px !important;
+}
+
+.side-nav .collapsible-body li a,
+.side-nav.fixed .collapsible-body li a {
+    padding: 0 15px 0 70px;
+}
+
+.side-nav .collapsible-body li a:hover,
+.side-nav.fixed .collapsible-body li a:hover {
+    background-color: #efefef;
+}
+
+.side-nav .collapsible-body .collapsible-body li a,
+.side-nav.fixed .collapsible-body .collapsible-body li a {
+    padding-left: 85px;
+}
+
+
+
+/*************************************************/
+/* Accordion Overrides */
+
+.collapsible-body {
+    padding: 1rem 0rem 1rem 2rem;
+}
+
+.lean .collapsible-body,
+.collapsible-body,
+.collapsible-body .collapsible-header {
+    background-color: #fff;
+}
+
+.collapsible.lean {
+    box-shadow: none;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+}
+
+.lean .collapsible-header {
+    padding-bottom: 5px;
+}
+
+.lean .collapsible-header h5 {
+    margin: 0;
+}
+
+.lean .collapsible-header h6 {
+    font-size: 1.25rem;
+}
+
+.lean>li {
+    margin-bottom: 20px;
+}
+
+.lean .lean .collapsible-header {
+    border-bottom: 1px solid transparent;
+    transition: all .05s ease-in-out;
+}
+
+.lean .lean .collapsible-header:not(.active):hover {
+    border-bottom: 1px solid #ecebeb;
+}
+
+.lean .lean .collapsible-body:not(.log-view) {
+    border-bottom: 0px;
+    border-left: 1px solid #ddd;
+}
+
+.collapsible-header.active i:not(.state):not(.all):not(.none) {
+    padding-top: 4px;
+    -ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.collapsible-header .state {
+    font-size: 1.2rem;
+    padding-top: 4px;
+}
+
+.collapsible-header .title {
+  padding-top: 2px;
+}
+
+
+
+/*************************************************/
+/* Collapsible-header expand/collapse toggle icons */
+
+.collapsible-header .expand {
+  height: 22px;
+  margin-left: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .1s ease-in-out;
+}
+
+.collapsible-header:hover .expand,
+.collapsible-header:hover .toggle-data {
+  opacity: 1;
+  visibility: visible;
+  transition: all .1s ease-in-out;
+}
+
+.expand i {
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1 !important;
+  margin: 0;
+  padding: 0;
+  width: 24px;
+}
+
+.expand i:hover {
+  background-color: #ddd;
+  transition: all .2s ease-in-out;
+}
+
+header .expand {
+  float: right;
+  height: 35px;
+  margin-top: .8rem;
+  margin-right: 1.25rem;
+}
+
+.section { 
+  padding: 0 !important; 
+}
+
+.section>.collapsible-header { 
+  border-width: 1px 1px 1px 1px !important;
+  border-style: solid !important;
+  border-color: #ddd !important;
+  padding-bottom: .85rem;
+}
+
+.section>.collapsible-body { 
+  border-width: 0px 1px 1px 1px !important;
+  border-style: solid !important;
+  border-color: #ddd !important;
+  padding-top: 0;
+}
+
+.section>.collapsible-body .collapsible-header {
+  padding-left: 1.5rem;
+}
+
+.section>.collapsible-body .collapsible-header .title {
+  margin-left: .2rem; 
+}
+
+.section>.collapsible-body>ul.collapsible {
+  margin-top: 0;
+}
+
+.section>.collapsible-body>.data-list {
+  padding-left: 0.2rem;
+}
+
+.section>.collapsible-body>.collapsible .descr{
+  padding-top: 0.5rem;
+}
+
+.section .collapsible>li:not(.logs) {
+  margin-left: .3rem;
+}
+
+.section>.collapsible-body>.collapsible-body {
+  margin-bottom: 0;
+}
+
+.section>.collapsible-header.active,
+.section>.collapsible-header.active:hover {
+  border-bottom: 1px solid transparent !important;
+}
+
+.section .collapsible-header, .section .collapsible-body {
+  background-color: #fdfdfd;
+}
+
+.lean .section:first-of-type {
+  margin-top: 1rem;
+}
+
+.logs .collapsible-body{
+  padding: 1rem !important;
+}
+
+/*************************************************/
+/* Helpers */
+
+.ml-1 {
+  margin-left: 1rem !important;
+}
+
+.ml-2 {
+  margin-left: 2rem !important;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.mtb-1 {
+  margin: 1rem 0 !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.pr-1 {
+  padding-right: 1rem !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.display-none {
+  display: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+
+/*************************************************/
+/* Amcharts */
+
+#chartdiv {
+    width: 100%;
+    height: 350px;
+}
+
+.amcharts-export-menu-top-right {
+    top: 10px;
+    right: 0;
+}
+
+.amcharts-chart-div>svg+a {
+    display: none !important;
+}
+
+.amcharts-pie-slice {
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition-duration: 0.3s;
+  transition: all .3s ease-out;
+  -webkit-transition: all .3s ease-out;
+  -moz-transition: all .3s ease-out;
+  -o-transition: all .3s ease-out;
+  cursor: pointer;
+  box-shadow: 0 0 30px 0 #000;
+}
+
+.amcharts-pie-slice:hover {
+  transform: scale(1.1);
+  filter: url(#shadow);
+}
+
+
+
+/*************************************************/
+/* State colors */
+
+
+/* top-nav state badge */
+.nav-info .badge.passed {
+  color: #00AA00 !important;  
+}
+.nav-info .badge.passx {
+  color: #00AABB !important;  
+}
+.nav-info .badge.failed {
+  color: #FF0000 !important;  
+}
+.nav-info .badge.errored {
+  color: #DF01D7 !important;  
+}
+.nav-info .badge.aborted {
+  color: #000000 !important;  
+}
+.nav-info .badge.blocked {
+  color: #A10A28 !important;  
+}
+.nav-info .badge.skipped {
+  color: #6E6E6E !important;  
+}
+
+
+/* header state badge */
+.passed.new.badge,
+.passed.collapsible-header .new.badge {
+    background-color: #00AA0066;
+}
+.passx.new.badge,
+.passx.collapsible-header .new.badge {
+    background-color: #00AABB66;
+}
+.failed.new.badge,
+.failed.collapsible-header .new.badge {
+    background-color: #FF000066;
+}
+.errored.new.badge,
+.errored.collapsible-header .new.badge {
+    background-color: #DF01D766;
+}
+.aborted.new.badge,
+.aborted.collapsible-header .new.badge {
+    background-color: #00000066;
+}
+.blocked.new.badge,
+.blocked.collapsible-header .new.badge {
+    background-color: #A10A2866;
+}
+.skipped.new.badge,
+.skipped.collapsible-header .new.badge {
+    background-color: #6E6E6E66;
+}
+.unknown.new.badge,
+.unknown.collapsible-header .new.badge {
+    background-color: #AAAAAA66;
+}
+.other.new.badge,
+.other.collapsible-header .new.badge {
+    background-color: #80cbc466;
+}
+
+
+
+/*************************************************/
+/* Trade colors */
+
+/*
+.passed { background-color: #00AA00; }
+.passx { background-color: #00AABB; }
+.failed { background-color: #FF0000; }
+.errored { background-color: #DF01D7; }
+.aborted { background-color: #000000; }
+.blocked { background-color: #A10A28; }
+.skipped { background-color: #6E6E6E; }
+.unknown { background-color: #AAAAAA; }
+*/
+
+
+
+/*************************************************/
+/* Media styling */
+
+@media only screen and (max-width: 992px) {
+    header,
+    main,
+    footer {
+        padding-left: 0;
+    }
+
+    header .page-title {
+        padding-left: .3rem;
+    }
+
+    main>div.row {
+        margin: 0 2rem;
+    }
+}
+
+@media only screen and (min-width: 993px) {
+    .container {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width: 601px) {
+    main>div.row {
+        margin: 0 .5rem;
+    }
+}
+</style>
+
+<body>
+    <header>
+        <div class="navbar-fixed">
+            <nav class="top-nav brown lighten-1">
+                <div class="nav-wrapper">
+                    <a href="#" data-activates="slide-out" class="button-collapse top-nav d-inline-block"><i class="material-icons">menu</i></a>
+                    <a class="ml-2">job</a>
+                    <div class="nav-info">
+                        <div>
+                            <span class="new badge passed" data-badge-caption="">PASSED</span>
+                        </div>
+                        <div>
+                            <span>2019-05-06</span>
+                            <span>0:01:01</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Collapsible side-nav content -->
+        <ul id="slide-out" class="side-nav">
+            <li class="side-nav-head brown lighten-1 z-depth-1">
+                <span>job</span>
+            </li>
+
+            <!-- Table of Contents -->
+            <li class="no-padding">
+                <ul>
+                    <li><a href="#overview" data-click="true">Overview</a></li>
+                    <li class="no-padding">
+                        <ul class="collapsible ">
+							
+							<li>
+								<a class="collapsible-header"><i class="material-icons">arrow_drop_down</i>Task-1: ntp_check_v3.py</a>
+								<div class="collapsible-body">
+									<ul>
+										
+										
+										
+                                        <li><a href="#script-1-test-1" data-click="true"><span class="name">commonSetup</span><span class="new badge passed" data-badge-caption="">PASSED</span></a></li>
+										
+										
+                                        <li><a href="#script-1-test-2" data-click="true"><span class="name">TESTCASE_1</span><span class="new badge passed" data-badge-caption="">PASSED</span></a></li>
+										
+									</ul>
+								</div>
+							</li>
+							
+                        </ul>
+                    </li>
+                    <li>
+		                <div class="divider m-0"></div>
+		            </li>                    
+                </ul>
+            </li>
+        </ul>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+            <div class="col s12">
+                <ul class="collapsible lean" data-collapsible="expandable">
+                	<!-- Overview -->
+                    <li>
+                        <div id="overview" class="collapsible-header active">
+                            <i class="material-icons">arrow_drop_down</i>
+                            <h6>Overview</h6>
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row d-flex">
+                                <div class="col m12 l5 overview">
+                                	<table>
+                                		<tr>
+                                			<td><b>Job Name:</b></td>
+                                            <td>job</td>
+                                		</tr>
+                                		<tr>
+                                			<td><b>Start Time:</b></td>
+                                            <td>2019-05-06T19:47:36</td>
+                                		</tr>
+                                		<tr>
+                                			<td><b>End Time:</b></td>
+                                            <td>2019-05-06T19:48:38</td>
+                                		</tr>
+                                		<tr>
+                                			<td><b>Submitter:</b></td>
+                                            <td>dmitrii</td>
+                                		</tr>
+                                		<tr>
+                                			<td><b>Run Time:</b></td>
+                                            <td>0:01:01</td>
+                                		</tr>
+                                		<tr>
+                                			<td><b>Testbed:</b></td>
+                                            <td>Testbed</td>
+                                		</tr>
+                                		
+                                		
+                                	</table>
+                                </div>
+                                <div class="col m12 l7">
+                                    <div id="chartdiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Testscripts -->
+                    
+
+
+<!--Testscript content-->
+<li>
+
+    
+    <div id="script-1" class="collapsible-header other active">
+    
+        <i class="material-icons">arrow_drop_down</i>
+        <h6>Task-1: ntp_check_v3.py</h6> <i class="material-icons">arrow_drop_down</i>
+        
+        
+        <div class="not-collapse expand">
+            <i class="material-icons all tooltipped" data-position="top" data-delay="30" data-tooltip="expand all">expand_more</i>
+            <i class="material-icons none tooltipped" data-position="top" data-delay="30" data-tooltip="collapse all">expand_less</i>
+        </div>
+    </div>
+    <div class="collapsible-body pr-1">
+        
+        
+
+        <!-- Testcases -->
+        <ul class="collapsible lean" data-collapsible="expandable">
+            
+            
+            <li>
+                <div id="script-1-test-1" class="collapsible-header passed">
+                    <!-- <i class="small material-icons state">brightness_1</i> -->
+                    <i class="material-icons">arrow_drop_down</i>
+                    <span class="title">commonSetup</span>
+                    
+                    
+                    <div class="not-collapse expand">
+                        <i class="material-icons all tooltipped" data-position="top" data-delay="30" data-tooltip="expand all">expand_more</i>
+                        <i class="material-icons none tooltipped" data-position="top" data-delay="30" data-tooltip="collapse all">expand_less</i>
+                    </div>
+                    <span class="new badge ml-1" data-badge-caption="">PASSED</span>
+                    <span class="new badge time ml-1" data-badge-caption="">0:00:22</span>
+                </div>
+                <div class="collapsible-body">
+                    
+                    
+                    <!-- Sections -->
+                    <ul class="collapsible lean" data-collapsible="expandable">
+
+                        
+
+                        <!-- Section-1 -->
+                        <li class="section">
+                            <div class="collapsible-header passed">
+                                <!-- <i class="small material-icons state">brightness_1</i> -->
+                                <i class="material-icons">arrow_drop_down</i>
+                                <span class="title">topology</span>
+                                
+                                
+                                <div class="not-collapse expand">
+                                    <i class="material-icons all tooltipped" data-position="top" data-delay="30" data-tooltip="expand all">expand_more</i>
+                                    <i class="material-icons none tooltipped" data-position="top" data-delay="30" data-tooltip="collapse all">expand_less</i>
+                                </div>
+                                <span class="new badge ml-1" data-badge-caption="">PASSED</span>
+                                <span class="new badge time ml-1" data-badge-caption="">0:00:22</span>
+                            </div>
+                            <div class="collapsible-body">
+                                
+                                
+                                <ul class="collapsible lean" data-collapsible="expandable">
+                                    <!-- Steps -->
+                                    
+
+                                    <!-- log -->
+                                    <li class="logs">
+                                        <div class="collapsible-header passed">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                            <span class="title"><b>Section Logs</b></span>
+                                        </div>
+                                        <div class="collapsible-body">
+                                            <pre class="editor" style="height: 3962px;">6: NOC: 2019-05-06T19:47:40: %AETEST-6-INFO: %[pid=24598][pname=Task-1]: Starting subsection topology
+7: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=7.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+8: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=7.2/3][pid=24598][pname=Task-1]: |                 Connect to device &#39;Device HQ-FW1, type ASA&#39;                  |
+9: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=7.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+10: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-FW1 logfile logs/job.2019May06_19:47:35.892361/HQ-FW1-default-1557128860.log +++
+11: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ Unicon plugin asa +++
+12: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ connection to spawn: ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 cisco@192.168.3.108, id: 139790915827808 +++
+0: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24612][pname=Task-1]: ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 cisco@192.168.3.108
+13: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: connection to HQ-FW1
+[2019-05-06 19:47:40,232] ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 cisco@192.168.3.108
+cisco@192.168.3.108&#39;s password: 
+Type help or &#39;?&#39; for a list of available commands.
+
+HQ-FW1# 
+18: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ initializing handle +++
+19: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-FW1: executing command &#39;terminal pager 0&#39; +++
+terminal pager 0
+
+HQ-FW1# 
+21: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=21.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+22: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=21.2/3][pid=24598][pname=Task-1]: |             Connect to device &#39;Device vSRX-BR2-FW1, type JUNOS&#39;              |
+23: NOC: 2019-05-06T19:47:40: %SCRIPT-6-INFO: %[part=21.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+24: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1 logfile logs/job.2019May06_19:47:35.892361/vSRX-BR2-FW1-default-1557128860.log +++
+25: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ Unicon plugin linux +++
+26: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ connection to spawn: ssh -l cisco 192.168.3.113, id: 139790915827304 +++
+27: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: connection to vSRX-BR2-FW1
+0: NOC: 2019-05-06T19:47:40: %UNICON-6-INFO: %[pid=24613][pname=Task-1]: ssh -l cisco 192.168.3.113
+[2019-05-06 19:47:40,651] ssh -l cisco 192.168.3.113
+Password:
+--- JUNOS 17.3R1.10 built 2017-08-23 06:47:03 UTC
+cisco@vSRX-BR2-FW1&gt; 
+33: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ initializing handle +++
+34: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;stty cols 200&#39; +++
+stty
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; stty   cols
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; sttycols   200
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; 
+59: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;stty rows 200&#39; +++
+stty
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; stty   rows
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; sttyrows   200
+                    ^
+unknown command.
+
+cisco@vSRX-BR2-FW1&gt; 
+84: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=84.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+85: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=84.2/3][pid=24598][pname=Task-1]: |              Connect to device &#39;Device VyOS-BR1-ED1, type VYOS&#39;              |
+86: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=84.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+87: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1 logfile logs/job.2019May06_19:47:35.892361/VyOS-BR1-ED1-default-1557128872.log +++
+88: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ Unicon plugin linux +++
+89: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ connection to spawn: ssh -l vyos 192.168.3.111, id: 139790915847112 +++
+90: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: connection to VyOS-BR1-ED1
+0: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24616][pname=Task-1]: ssh -l vyos 192.168.3.111
+[2019-05-06 19:47:52,459] ssh -l vyos 192.168.3.111
+Welcome to VyOS
+vyos@192.168.3.111&#39;s password: 
+Linux VyOS-BR1-ED1 3.13.11-1-amd64-vyos #1 SMP Sat Nov 11 12:10:30 CET 2017 x86_64
+Welcome to VyOS.
+This system is open-source software. The exact distribution terms for 
+each module comprising the full system are described in the individual 
+files in /usr/share/doc/*/copyright.
+Last login: Mon May  6 19:43:57 2019 from 192.168.1.10
+
+vyos@VyOS-BR1-ED1:~$ 
+100: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ initializing handle +++
+101: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;stty cols 200&#39; +++
+stty cols 200
+vyos@VyOS-BR1-ED1:~$ 
+105: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;stty rows 200&#39; +++
+stty rows 200
+vyos@VyOS-BR1-ED1:~$ 
+107: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=107.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+108: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=107.2/3][pid=24598][pname=Task-1]: |                 Connect to device &#39;Device HQ-ED1, type IOS&#39;                  |
+109: NOC: 2019-05-06T19:47:52: %SCRIPT-6-INFO: %[part=107.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+110: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1 logfile logs/job.2019May06_19:47:35.892361/HQ-ED1-default-1557128872.log +++
+111: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ Unicon plugin ios +++
+112: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ connection to spawn: ssh -l cisco 192.168.3.109, id: 139790915861416 +++
+0: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24618][pname=Task-1]: ssh -l cisco 192.168.3.109
+113: NOC: 2019-05-06T19:47:52: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: connection to HQ-ED1
+[2019-05-06 19:47:52,912] ssh -l cisco 192.168.3.109
+
+
+**************************************************************************
+
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+
+* education. IOSv is provided as-is and is not supported by Cisco&#39;s      *
+
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+
+* of the IOSv Software or Documentation to any third party for any       *
+
+* purposes is expressly prohibited except as otherwise authorized by     *
+
+* Cisco in writing.                                                      *
+
+**************************************************************************Password: 
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco&#39;s      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+HQ-ED1#
+119: NOC: 2019-05-06T19:47:56: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ initializing handle +++
+120: NOC: 2019-05-06T19:47:56: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;term length 0&#39; +++
+term length 0
+HQ-ED1#
+133: NOC: 2019-05-06T19:47:56: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;term width 0&#39; +++
+term width 0
+HQ-ED1#
+148: NOC: 2019-05-06T19:47:56: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;show version&#39; +++
+show version
+Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.6(1)T, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2015 by Cisco Systems, Inc.
+Compiled Fri 20-Nov-15 13:39 by prod_rel_team
+
+
+ROM: Bootstrap program is IOSv
+
+HQ-ED1 uptime is 2 days, 33 minutes
+System returned to ROM by reload
+System image file is &#34;flash0:/vios-adventerprisek9-m&#34;
+Last reload reason: Unknown reason
+
+
+
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply
+third-party authority to import, export, distribute or use encryption.
+Importers, exporters, distributors and users are responsible for
+compliance with U.S. and local country laws. By using this product you
+agree to comply with applicable laws and regulations. If you are unable
+to comply with U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Cisco IOSv (revision 1.0) with  with 460033K/62464K bytes of memory.
+Processor board ID 93SW7D7CKPFQDYZ29PO8R
+4 Gigabit Ethernet interfaces
+DRAM configuration is 72 bits wide with parity disabled.
+256K bytes of non-volatile configuration memory.
+2097152K bytes of ATA System CompactFlash 0 (Read/Write)
+0K bytes of ATA CompactFlash 1 (Read/Write)
+1024K bytes of ATA CompactFlash 2 (Read/Write)
+0K bytes of ATA CompactFlash 3 (Read/Write)
+
+
+
+Configuration register is 0x0
+
+HQ-ED1#
+163: NOC: 2019-05-06T19:47:56: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: config +++
+config term
+Enter configuration commands, one per line.  End with CNTL/Z.
+HQ-ED1(config)#no logging console
+HQ-ED1(config)#line console 0
+HQ-ED1(config-line)#exec-timeout 0
+HQ-ED1(config-line)#end
+HQ-ED1#
+233: NOC: 2019-05-06T19:47:57: %SCRIPT-6-INFO: %[part=233.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+234: NOC: 2019-05-06T19:47:57: %SCRIPT-6-INFO: %[part=233.2/3][pid=24598][pname=Task-1]: |                 Connect to device &#39;Device HQ-CO1, type IOS&#39;                  |
+235: NOC: 2019-05-06T19:47:57: %SCRIPT-6-INFO: %[part=233.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+236: NOC: 2019-05-06T19:47:57: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1 logfile logs/job.2019May06_19:47:35.892361/HQ-CO1-default-1557128877.log +++
+237: NOC: 2019-05-06T19:47:57: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ Unicon plugin ios +++
+238: NOC: 2019-05-06T19:47:57: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ connection to spawn: ssh -l cisco 192.168.3.106, id: 139790915859400 +++
+239: NOC: 2019-05-06T19:47:57: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: connection to HQ-CO1
+0: NOC: 2019-05-06T19:47:57: %UNICON-6-INFO: %[pid=24620][pname=Task-1]: ssh -l cisco 192.168.3.106
+[2019-05-06 19:47:57,079] ssh -l cisco 192.168.3.106
+
+
+**************************************************************************
+
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+
+* education. IOSv is provided as-is and is not supported by Cisco&#39;s      *
+
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+
+* of the IOSv Software or Documentation to any third party for any       *
+
+* purposes is expressly prohibited except as otherwise authorized by     *
+
+* Cisco in writing.                                                      *
+
+**************************************************************************Password: 
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco&#39;s      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+HQ-CO1#
+245: NOC: 2019-05-06T19:48:00: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ initializing handle +++
+246: NOC: 2019-05-06T19:48:00: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1: executing command &#39;term length 0&#39; +++
+term length 0
+HQ-CO1#
+260: NOC: 2019-05-06T19:48:00: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1: executing command &#39;term width 0&#39; +++
+term width 0
+HQ-CO1#
+275: NOC: 2019-05-06T19:48:01: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1: executing command &#39;show version&#39; +++
+show version
+Cisco IOS Software, vios_l2 Software (vios_l2-ADVENTERPRISEK9-M), Experimental Version 15.2(20170321:233949) [mmen 101]
+Copyright (c) 1986-2017 by Cisco Systems, Inc.
+Compiled Wed 22-Mar-17 08:38 by mmen
+
+
+ROM: Bootstrap program is IOSv
+
+HQ-CO1 uptime is 1 day, 22 hours, 59 minutes
+System returned to ROM by reload
+System image file is &#34;flash0:/vios_l2-adventerprisek9-m&#34;
+Last reload reason: Unknown reason
+
+
+
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply
+third-party authority to import, export, distribute or use encryption.
+Importers, exporters, distributors and users are responsible for
+compliance with U.S. and local country laws. By using this product you
+agree to comply with applicable laws and regulations. If you are unable
+to comply with U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Cisco IOSv () processor (revision 1.0) with 574721K/209920K bytes of memory.
+Processor board ID 9EVZZ87SY01
+20 Gigabit Ethernet interfaces
+DRAM configuration is 72 bits wide with parity disabled.
+256K bytes of non-volatile configuration memory.
+2097152K bytes of ATA System CompactFlash 0 (Read/Write)
+0K bytes of ATA CompactFlash 1 (Read/Write)
+0K bytes of ATA CompactFlash 2 (Read/Write)
+0K bytes of ATA CompactFlash 3 (Read/Write)
+
+Configuration register is 0x101
+
+HQ-CO1#
+287: NOC: 2019-05-06T19:48:01: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1: config +++
+config term
+Enter configuration commands, one per line.  End with CNTL/Z.
+HQ-CO1(config)#no logging console
+HQ-CO1(config)#line console 0
+HQ-CO1(config-line)#exec-timeout 0
+HQ-CO1(config-line)#end
+HQ-CO1#
+354: NOC: 2019-05-06T19:48:02: %AETEST-6-INFO: %[pid=24598][pname=Task-1]: The result of subsection topology is =&gt; PASSED
+355: NOC: 2019-05-06T19:48:02: %AETEST-6-INFO: %[pid=24598][pname=Task-1]: The result of common setup is =&gt; PASSED
+356: NOC: 2019-05-06T19:48:02: %AETEST-6-INFO: %[pid=24598][pnam</pre>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        
+                    </ul>
+                </div>
+            </li>
+            
+            
+            <li>
+                <div id="script-1-test-2" class="collapsible-header passed">
+                    <!-- <i class="small material-icons state">brightness_1</i> -->
+                    <i class="material-icons">arrow_drop_down</i>
+                    <span class="title">TESTCASE_1</span>
+                    
+                    
+                    <div class="not-collapse expand">
+                        <i class="material-icons all tooltipped" data-position="top" data-delay="30" data-tooltip="expand all">expand_more</i>
+                        <i class="material-icons none tooltipped" data-position="top" data-delay="30" data-tooltip="collapse all">expand_less</i>
+                    </div>
+                    <span class="new badge ml-1" data-badge-caption="">PASSED</span>
+                    <span class="new badge time ml-1" data-badge-caption="">0:00:35</span>
+                </div>
+                <div class="collapsible-body">
+                    
+                    
+                    <!-- Sections -->
+                    <ul class="collapsible lean" data-collapsible="expandable">
+
+                        
+
+                        <!-- Section-1 -->
+                        <li class="section">
+                            <div class="collapsible-header passed">
+                                <!-- <i class="small material-icons state">brightness_1</i> -->
+                                <i class="material-icons">arrow_drop_down</i>
+                                <span class="title">GET_NTP_INFO</span>
+                                
+                                
+                                <div class="not-collapse expand">
+                                    <i class="material-icons all tooltipped" data-position="top" data-delay="30" data-tooltip="expand all">expand_more</i>
+                                    <i class="material-icons none tooltipped" data-position="top" data-delay="30" data-tooltip="collapse all">expand_less</i>
+                                </div>
+                                <span class="new badge ml-1" data-badge-caption="">PASSED</span>
+                                <span class="new badge time ml-1" data-badge-caption="">0:00:35</span>
+                            </div>
+                            <div class="collapsible-body">
+                                
+                                
+                                <ul class="collapsible lean" data-collapsible="expandable">
+                                    <!-- Steps -->
+                                    
+
+                                    <!-- log -->
+                                    <li class="logs">
+                                        <div class="collapsible-header passed">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                            <span class="title"><b>Section Logs</b></span>
+                                        </div>
+                                        <div class="collapsible-body">
+                                            <pre class="editor" style="height: 1386px;">357: NOC: 2019-05-06T19:48:02: %AETEST-6-INFO: %[pid=24598][pname=Task-1]: Starting section GET_NTP_INFO
+358: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=358.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+359: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=358.2/3][pid=24598][pname=Task-1]: |                  Getting OS from &#39;Device HQ-FW1, type ASA&#39;                   |
+360: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=358.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+361: NOC: 2019-05-06T19:48:02: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-FW1: executing command &#39;show run ntp&#39; +++
+show run ntp
+ntp server 9.9.9.9
+
+HQ-FW1# 
+363: NOC: 2019-05-06T19:48:02: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-FW1: executing command &#39;copy /noconfirm flash:/rollback_config.txt startup-config&#39; +++
+copy /noconfirm flash:/rollback_config.txt startup-config
+
+9583 bytes copied in 0.90 secs
+
+HQ-FW1# 
+399: NOC: 2019-05-06T19:48:02: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-FW1: executing command &#39;reload noconfirm&#39; +++
+reload noconfirm
+
+HQ-FW1# 
+403: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=403.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+404: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=403.2/3][pid=24598][pname=Task-1]: |              Getting OS from &#39;Device vSRX-BR2-FW1, type JUNOS&#39;               |
+405: NOC: 2019-05-06T19:48:02: %SCRIPT-6-INFO: %[part=403.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+406: NOC: 2019-05-06T19:48:02: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;show configuration system ntp&#39; +++
+show configuration system ntp 
+server 9.9.9.9;
+
+cisco@vSRX-BR2-FW1&gt; 
+417: NOC: 2019-05-06T19:48:04: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;edit&#39; +++
+edit 
+Entering configuration mode
+
+[edit]
+cisco@vSRX-BR2-FW1# 
+425: NOC: 2019-05-06T19:48:04: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;rollback 1&#39; +++
+rollback 1 
+load complete
+
+[edit]
+
+434: NOC: 2019-05-06T19:48:05: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ vSRX-BR2-FW1: executing command &#39;commit&#39; +++
+cisco@vSRX-BR2-FW1# 
+436: NOC: 2019-05-06T19:48:05: %SCRIPT-6-INFO: %[part=436.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+437: NOC: 2019-05-06T19:48:05: %SCRIPT-6-INFO: %[part=436.2/3][pid=24598][pname=Task-1]: |               Getting OS from &#39;Device VyOS-BR1-ED1, type VYOS&#39;               |
+438: NOC: 2019-05-06T19:48:05: %SCRIPT-6-INFO: %[part=436.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+439: NOC: 2019-05-06T19:48:05: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;show ntp&#39; +++
+show ntp
+[?1h=
+     remote           local      st poll reach  delay   offset    disp[m
+=======================================================================[m
+=9.9.9.9         15.15.15.2      16   64    0 0.00000  0.000000 3.99217[m
+
+[K[?1l&gt;vyos@VyOS-BR1-ED1:~$ 
+444: NOC: 2019-05-06T19:48:05: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;configure&#39; +++
+configure
+[edit]
+
+vyos@VyOS-BR1-ED1# 
+447: NOC: 2019-05-06T19:48:05: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;rollback 1&#39; +++
+rollback 1
+Proceed with reboot? [confirm]
+451: NOC: 2019-05-06T19:48:06: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ VyOS-BR1-ED1: executing command &#39;y&#39; +++
+y
+
+
+Broadcast message from root@VyOS-BR1-ED1 (pts/0) (Mon May  6 19:47:18 2019):
+
+The system is going down for reboot NOW!
+
+[edit]
+
+vyos@VyOS-BR1-ED1# 
+456: NOC: 2019-05-06T19:48:06: %SCRIPT-6-INFO: %[part=456.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+457: NOC: 2019-05-06T19:48:06: %SCRIPT-6-INFO: %[part=456.2/3][pid=24598][pname=Task-1]: |                  Getting OS from &#39;Device HQ-ED1, type IOS&#39;                   |
+458: NOC: 2019-05-06T19:48:06: %SCRIPT-6-INFO: %[part=456.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+459: NOC: 2019-05-06T19:48:06: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;show run | s ntp&#39; +++
+show run | s ntp
+ntp server 9.9.9.9
+HQ-ED1#
+477: NOC: 2019-05-06T19:48:10: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;configure replace flash:rollback_config.txt force&#39; +++
+configure replace flash:rollback_config.txt force
+Total number of passes: 1
+Rollback Done
+
+HQ-ED1#
+519: NOC: 2019-05-06T19:48:26: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-ED1: executing command &#39;wr&#39; +++
+wr
+Building configuration...
+[OK]
+HQ-ED1#
+525: NOC: 2019-05-06T19:48:31: %SCRIPT-6-INFO: %[part=525.1/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+526: NOC: 2019-05-06T19:48:31: %SCRIPT-6-INFO: %[part=525.2/3][pid=24598][pname=Task-1]: |                  Getting OS from &#39;Device HQ-CO1, type IOS&#39;                   |
+527: NOC: 2019-05-06T19:48:31: %SCRIPT-6-INFO: %[part=525.3/3][pid=24598][pname=Task-1]: +------------------------------------------------------------------------------+
+528: NOC: 2019-05-06T19:48:31: %UNICON-6-INFO: %[pid=24598][pname=Task-1]: +++ HQ-CO1: executing command &#39;show run | s ntp&#39; +++
+show run | s ntp
+ntp server 10.255.255.2
+HQ-CO1#
+547: NOC: 2019-05-06T19:48:37: %AETEST-6-INFO: %[pid=24598][pname=Task-1]: The result of section GET_NTP_INFO is =&gt; PASSED
+548: NOC: 2019-05-06T19:48:37: %AETEST-</pre>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        
+                    </ul>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</li>
+
+
+                </ul>
+            </div>
+        </div>
+        </div>
+
+        <div class="fixed-action-btn">
+		    <a class="btn-floating btn-large waves-effect waves-light red scrollToTop" style="display: none;">
+		      <i class="large material-icons">arrow_upward</i>
+		    </a>
+		</div>
+    </main>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <!-- <script src="https://www.amcharts.com/lib/3/serial.js"></script> -->
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+    <!-- AceEditor -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+
+
+    // Strip whitespace from Ace Editor text
+	var p = document.getElementsByClassName("editor");
+	for (i = 0; i < p.length; i++) {
+		p[i].textContent = p[i].textContent.replace(/^\s+/mg, "");
+	};
+
+	// Initialize Ace Editor for all .editor elements
+    var editor;
+    $('.editor').each(function( index ) {
+    	editor = ace.edit(this);
+
+    	editor.setOptions({
+	    	readOnly: true,
+	    	showLineNumbers: false,
+	    	showGutter: false,
+	    	showPrintMargin: false,
+	    });
+		editor.setTheme("ace/theme/chrome");
+    });
+
+
+    // Initialize collapse button and collapsible accordion
+    $(".button-collapse").sideNav();
+    $('.collapsible').collapsible();
+
+
+    // Open parent collapsibles when child collapsible is opened
+    $('[data-click]').on('click', function(e) {
+        var el = $($(this).attr('href'));
+        var oneUp = $(el).closest('.collapsible-body').prev('.collapsible-header');
+        var twoUp = $(oneUp).closest('.collapsible-body').prev('.collapsible-header');
+
+        $(el).trigger('click');
+        $.each([oneUp, twoUp], function(i, val) {
+            if (!$(val).hasClass('active'))
+                $(val).trigger('click');
+        });
+
+        // close sidenav on link click
+        $(this).sideNav('hide');
+    });
+
+
+    // Stop collapse event from actions clicked inside collapsible headers
+    $(".not-collapse").on("click", function(e) { e.stopPropagation(); });
+
+    // Expand or Collapse sections by trigerring a click
+    $('.expand i').on('click', function(e) {
+    	var parent, all, el;
+
+    	el = $(this);
+		parent = el.closest('.collapsible-header');
+		all = parent.next('.collapsible-body')
+				    .find('.collapsible-header');
+
+		if ( el.closest('.side-nav').length !== 0 ) {
+			headers = $('.side-nav .collapsible-header');
+
+			if ( el.hasClass('all') && !headers.hasClass('active'))
+				headers.trigger('click');
+			else if ( el.hasClass('none') && headers.hasClass('active') )
+				headers.trigger('click');
+		}
+
+		// check if the click is to expand all sections
+     	else if ( el.hasClass('all') ) {
+    		all.each( function() {
+    			if ( !$(this).hasClass('active') )
+    				$(this).trigger('click');
+    		});
+    		if ( !parent.hasClass('active') )
+    			parent.trigger('click');
+    	}
+
+    	// check if the click is to collapse all sections
+    	else if ( el.hasClass('none') ) {
+    		all.each( function() {
+    			if ( $(this).hasClass('active') )
+    				$(this).trigger('click');
+    		});
+    		// close the parent collapse section if it's open
+    		if ( parent.hasClass('active') )
+    			parent.trigger('click');
+    	}
+    });
+
+
+	// Toggle scrollToTop button visibility based on scroll
+	$(document).ready(function(){
+		//Check to see if the window is top if not then display button
+		$(window).scroll(function(){
+			if ($(this).scrollTop() > 100)
+				$('.scrollToTop').fadeIn();
+			else
+				$('.scrollToTop').fadeOut();
+		});
+		//Click event to scroll to top
+		$('.scrollToTop').click(function(){
+			$('html, body').animate({scrollTop : 0},800);
+			return false;
+		});
+	});
+
+
+	// Setup custom collapse sections
+	$('[data-function="toggler"]').on('click', function (e) {
+	    var el = $(this);
+	    var header = el.closest('.collapsible-header');
+		var collapse;
+
+		// check the data-target, find that first child, then
+		// assign for toggling
+	    if (el.attr('data-target') == 'descr') {
+	    	if (header.next('.collapsible-body').length !== 0){
+	    		console.log(header.next('.collapsible-body'))
+	    		collapse = header.next('.collapsible-body').find('.descr').first();
+	    	}
+	    	else
+	    		collapse = header.next('.descr');
+	    }
+	    else if (el.attr('data-target') == 'meta')
+	    	collapse = header.next('.collapsible-body').find('.meta').first();
+
+	    if (!header.hasClass('active'))
+	    	header.trigger('click');
+
+     	collapse.slideToggle();
+	});
+
+	// Setup the Pie Chart
+    var chart = AmCharts.makeChart("chartdiv", {
+	  "type": "pie",
+	  "startDuration": 0,
+	   "theme": "light",
+	  "addClassNames": true,
+	  "legend":{
+	   	"position":"right",
+	    "marginRight":100,
+	    "autoMargins":false
+	  },
+	  "innerRadius": "30%",
+	  "defs": {
+	    "filter": [{
+	      "id": "shadow",
+	      "width": "200%",
+	      "height": "200%",
+	      "feOffset": {
+	        "result": "offOut",
+	        "in": "SourceAlpha",
+	        "dx": 0,
+	        "dy": 0
+	      },
+	      "feGaussianBlur": {
+	        "result": "blurOut",
+	        "in": "offOut",
+	        "stdDeviation": 5
+	      },
+	      "feBlend": {
+	        "in": "SourceGraphic",
+	        "in2": "blurOut",
+	        "mode": "normal"
+	      }
+	    }]
+	  },
+	  "dataProvider": [{
+            "status": "passed",
+            "count": 2,
+            "color": "rgb(0, 170, 0)" //#00AA00
+        }, {
+            "status": "passx",
+            "count": 0,
+            "color": "rgb(0, 170, 187)" //#00AABB
+        }, {
+            "status": "failed",
+            "count": 0,
+            "color": "rgb(255, 0, 0)" //#FF0000
+        }, {
+            "status": "errored",
+            "count": 0,
+            "color": "rgb(223, 1, 215)" //#DF01D7
+        }, {
+            "status": "aborted",
+            "count": 0,
+            "color": "rgb(0, 0, 0)" //#000000
+        }, {
+            "status": "blocked",
+            "count": 0,
+            "color": "rgb(161, 10, 40)" //#A10A28
+        }, {
+            "status": "skipped",
+            "count": 0,
+            "color": "rgb(110, 110, 110)" //#6E6E6E
+        }],
+	  "valueField": "count",
+	  "titleField": "status",
+	  "colorField": "color",
+	  "export": {
+	    "enabled": true
+	  }
+	});
+
+	chart.addListener("init", handleInit);
+
+	chart.addListener("rollOverSlice", function(e) {
+	  handleRollOver(e);
+	});
+
+	function handleInit(){
+	  chart.legend.addListener("rollOverItem", handleRollOver);
+	}
+
+	function handleRollOver(e){
+	  var wedge = e.dataItem.wedge.node;
+	  wedge.parentNode.appendChild(wedge);
+	}
+    </script>
+</body>
+
+</html>

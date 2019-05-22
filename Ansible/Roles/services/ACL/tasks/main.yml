@@ -1,0 +1,5 @@
+---
+
+- name: generate ACL from templates
+  when: inventory_hostname in groups['ACL']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/9_ACL-config.conf

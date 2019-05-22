@@ -1,0 +1,2 @@
+# for napalm_install_config (Modules)
+config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/production/CONFIGS

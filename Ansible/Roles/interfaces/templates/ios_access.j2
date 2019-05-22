@@ -1,0 +1,12 @@
+{% for iface in interfaces_access %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ switchport mode access
+ switchport access vlan {{ iface.vlan }}
+ spanning-tree {{ iface.portfast }}
+ spanning-tree bpduguard {{ iface.bpduguard }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+

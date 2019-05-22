@@ -1,0 +1,31 @@
+---
+- name: Generate all config
+  hosts: ALL
+  gather_facts: no
+
+  pre_tasks:
+    - name: remove potentially existing previous folder for candidate config
+      file: path={{config_dir}}/{{inventory_hostname}} state=absent
+    - name: create candidate config directory (if it does not exist)
+      file: path={{config_dir}}/{{inventory_hostname}} state=directory
+
+  roles:
+    - basic_config
+    - stp
+    - vlans
+    - interfaces
+    - interfaces_vlans
+    - ZBF
+    - role: FHRP/glbp
+    - role: routing/static
+    - role: routing/ospfv2
+    - role: services/DHCP
+    - role: services/ACL
+    - role: services/PAT
+    - role: VPN/IPsec
+
+  post_tasks:
+    - name: Append templates together to create final configuration file
+      assemble:
+        src: "{{ config_dir }}/{{ inventory_hostname }}"
+        dest: "{{ config_dir }}/{{ inventory_hostname }}/FINAL_pre.conf"

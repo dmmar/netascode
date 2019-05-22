@@ -1,0 +1,40 @@
+testbed:
+    name: Testbed
+
+# HQ-Clients
+devices:
+    HQ-C1:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.4.1
+                port: 5028
+    HQ-C2:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.4.1
+                port: 5030
+    HQ-C3:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.4.1
+                port: 5035
+    HQ-C4:
+        os: linux
+        type: linux
+        connections:
+            vty:
+                protocol: telnet
+                ip: 192.168.4.1
+                port: 5033
+
+
+

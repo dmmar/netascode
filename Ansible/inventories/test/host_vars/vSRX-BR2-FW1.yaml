@@ -1,0 +1,174 @@
+# vSRX-BR2-FW1
+
+# Connection variables
+
+ansible_user: 'cisco'
+ansible_ssh_pass: 'Pa$$w0rd'
+ansible_connection: network_cli
+ansible_network_os: junos
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL_pre.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: False
+
+# for napalm_install_config (Modules)
+#config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/test/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: vSRX-BR2-FW1
+
+timezone: Pacific/Auckland
+ntp_server: 10.255.255.2
+
+
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'fxp0'
+
+int_gi1: 'ge-0/0/0'
+int_gi2: 'ge-0/0/1'
+int_loop1: 'lo0'
+int_st0: 'st0'
+
+# Interfaces-j2
+
+interfaces:
+  - name: "{{ int_loop1 }}"
+    description: "Lo0"
+    ip: 10.2.255.1/32
+  - name: "{{ int_gi1 }}"
+    description: "TO_ISP"
+    ip: 20.2.2.2/30
+  - name: "{{ int_gi2 }}"
+    description: "TO_BR2-C1"
+    ip: 10.2.100.1/27
+
+# ONLY IF THAT HOSTS IN GROUP [JunOS-IPsec]
+interfaces_st:
+    - name: st0
+
+# ZBF-j2
+
+sec_zones:
+    - zone_name: trust
+      address_books:
+          - address: BR2-N-10-2-100-0 10.2.100.0/27
+      services_zone:
+          - service: all
+      zone_ints:
+          - int_zone: "{{ int_gi2 }}"
+    - zone_name: untrust
+      address_books:
+          - address: HQ-N-10-255-255-0 10.255.255.0/30
+      services_zone:
+          - service: ping
+          - service: ssh
+          - service: ike
+      zone_ints:
+          - int_zone: "{{ int_gi1 }}"
+          - int_zone: "{{ int_st0 }}"
+
+
+# ZBF/junos_policies.j2
+
+sec_policies:
+    - from_zone: untrust
+      to_zone: trust
+      policy_name: VPN-UNTR-TR
+# match
+      source: HQ-N-10-255-255-0
+      dest: BR2-N-10-2-100-0
+      app: any
+      then: permit
+
+###########
+# Routing #
+###########
+
+# Static
+
+s_routes:
+  - route: 0.0.0.0/0
+    next_hop: 20.2.2.1
+    metric: 10
+
+# ONLY IF THAT HOSTS IN GROUP [JunOS-IPsec]
+
+ipsec_routes:
+    - ipsec_route: route 10.255.255.0/30 next-hop st0
+
+########
+# PAT  #
+########
+
+name_nat_rules_set: LAN-TO-WAN
+nat_from_zone: trust
+nat_to_zone: untrust
+
+nat_rules_set:
+    - rule_name: PAT-BR2-10-2-100-0
+      source_net: 10.2.100.0/27
+      dest_net: 0.0.0.0/0
+    - rule_name: PAT-BR2-10-2-100-32
+      source_net: 10.2.100.32/27
+      dest_net: 0.0.0.0/0
+
+##############
+# VPN/IPsec  #
+##############
+
+# VPN\IPsec-j2
+
+ike_proposals:
+    - proposal: IKE-PHASE1-PROPOSAL
+      auth_met: pre-shared-keys
+      dh_group: group2
+      auth_alg: sha1
+      encr_alg: aes-128-cbc
+      lifetime: 86400
+
+ike_policies:
+    - policy: IKE-PHASE1-POLICY
+      mode: main
+      proposal: IKE-PHASE1-PROPOSAL
+      shared_key: "$9$uQab0RcyrvXxNCAX-dVY25QF36A"
+
+ike_gateway:
+    - gw_name: HQ-FW1
+      policy: IKE-PHASE1-POLICY
+      remote_ip: 2.2.2.2
+      exter_int: ge-0/0/0
+
+ipsec_proposals:
+    - proposal: IPSEC-PHASE2-PROPOSAL
+      proto: esp
+      auth_alg: hmac-sha1-96
+      encr_alg: aes-128-cbc
+      lifetime: 28800
+
+ipsec_policies:
+    - policy: IPSEC-PHASE2-POLICY
+      dh_group: group5
+      proposal: IPSEC-PHASE2-PROPOSAL
+
+ipsec_vpns:
+    - vpn_name: IKE-VPN-HQ-FW1
+      bind_int: st0.0
+      gw_name: HQ-FW1
+      local_net: 10.2.100.0/27
+      remote_net: 10.255.255.0/30
+      service: any
+      policy: IPSEC-PHASE2-POLICY
+      estab_tunn: immediately

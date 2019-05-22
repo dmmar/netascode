@@ -1,0 +1,9 @@
+{% for iface in interfaces_vlans %}
+!
+interface {{ iface.name }}
+ encapsulation dot1q {{ iface.vlan }}
+ description {{ iface.description }}
+ ip address {{ iface.ip }}
+ {{ iface.shutdown }}
+!
+{% endfor %}

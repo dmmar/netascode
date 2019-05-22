@@ -1,0 +1,22 @@
+---
+- name: Simple IOS backup config
+  hosts: ALL
+  gather_facts: yes
+  vars:
+    create_backup_dir: "BACKUPS/ios_backups/{{ ansible_date_time.date }}"
+
+  tasks:
+  - name: Creates BACKUP directory
+    file:
+      path: "{{ create_backup_dir }}"
+      state: directory
+
+  - name: Get running config
+    ios_command:
+       commands: show run
+    register: show_run
+
+  - name: Save config to file
+    copy:
+      content: "{{ show_run.stdout[0] }}"
+      dest: "{{ create_backup_dir }}/{{ inventory_hostname }}--{{ ansible_date_time.iso8601 }}.txt"

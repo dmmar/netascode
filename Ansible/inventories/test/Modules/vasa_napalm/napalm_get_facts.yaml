@@ -1,0 +1,22 @@
+---
+- name: "NAPALM: GET FACTS"
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python"
+
+  tasks:
+
+  - name: get facts from device
+    napalm_get_facts:
+      optional_args: {'global_delay_factor': 4, 'port': 443}
+      hostname: '172.30.33.171'
+      username: 'cisco'
+      dev_os: 'asa'
+      password: 'cisco'
+      filter: 'facts'
+    register: result
+
+  - name: print data
+    debug: var=result
+

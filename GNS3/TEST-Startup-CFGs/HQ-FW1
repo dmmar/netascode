@@ -1,0 +1,30 @@
+hostname HQ-FW1
+enable password cisco
+!
+interface Management0/0
+ management-only
+ nameif MGMT
+ security-level 100
+ ip address 192.168.3.108 255.255.255.0
+ no shutdown
+!
+route MGMT 0 0 192.168.3.254
+!
+username cisco password cisco privilege 15
+!
+aaa authentication ssh console LOCAL
+aaa authentication http console LOCAL
+aaa authorization exec LOCAL auto-enable
+!
+http server enable
+http 0 0 MGMT
+!
+ssh 0 0 MGMT
+ssh version 2
+!
+rest-api image boot:/asa-restapi-132-lfbff-k8.SPA
+rest-api agent
+!
+pager 0
+!
+wr

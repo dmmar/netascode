@@ -1,0 +1,5 @@
+---
+
+- name: generate ip interface configs from templates
+  when: inventory_hostname in groups['routers-interfaces_vlans']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/5_interfaces-vlans-ip.conf

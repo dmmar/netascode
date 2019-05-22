@@ -1,0 +1,11 @@
+{% for iface in interfaces_trunk %}
+!
+interface {{ iface.name }}
+ description {{ iface.description }}
+ {{ trunk_encapsulation }}
+ switchport mode trunk
+ {{ iface.dtp }}
+ {{ iface.shutdown }}
+!
+{% endfor %}
+

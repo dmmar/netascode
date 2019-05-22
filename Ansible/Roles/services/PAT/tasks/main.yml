@@ -1,0 +1,5 @@
+---
+
+- name: generate pat from templates
+  when: inventory_hostname in groups['PAT']
+  template: src=../templates/{{ansible_network_os}}.j2 dest={{config_dir}}/{{inventory_hostname}}/6_pat-service.conf

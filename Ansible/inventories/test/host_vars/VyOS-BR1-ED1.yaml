@@ -1,0 +1,137 @@
+# VyOS-BR1-ED1
+
+# Connection variables
+
+ansible_user: 'vyos'
+ansible_ssh_pass: 'vyos'
+ansible_connection: network_cli
+ansible_network_os: vyos
+
+# for (commit-merge-final-config.yml)
+config_file: FINAL_pre.conf
+
+# for (generate-all-config-and-make-diff.yml)
+commit_changes: False
+replace_config: True
+
+# for napalm_install_config (Modules)
+#config_dir: /home/dmitrii/PycharmProjects/nac/Ansible/inventories/test/CONFIGS
+
+# Templates variables
+
+########
+# Base #
+########
+
+hostname: VyOS-BR1-ED1
+
+timezone: Pacific/Auckland
+ntp_server: 10.255.255.2
+
+ssh_listen_address: 192.168.3.111
+##############
+# Interfaces #
+##############
+
+# Interfaces:vars
+
+int_mgmt: 'eth0'
+
+int_eth1: 'eth1'
+int_eth2: 'eth2'
+int_loop1: 'dum0'
+int_vti0: 'vti0'
+
+# Interfaces-j2
+
+interfaces_dummy:
+  - name: "{{ int_loop1 }}"
+    ip: 10.1.255.1/32
+
+interfaces_ethernet:
+  - name: "{{ int_mgmt }}"
+    description: "MGMT-ONLY"
+    ip: 192.168.3.111/24
+  - name: "{{ int_eth1 }}"
+    description: "TO_BR1-AC1"
+    ip: 10.1.100.1/27
+  - name: "{{ int_eth2 }}"
+    description: "TO_ISP"
+    ip: 15.15.15.2/30
+
+# ONLY IF THAT HOSTS IN GROUP [VyOS-IPsec]
+interfaces_vti:
+  - name: "{{ int_vti0 }}"
+    ip: 169.254.100.1/30
+
+###########
+# Routing #
+###########
+
+# Static
+
+s_routes:
+  - route: 192.168.1.0/24
+    next_hop: 192.168.3.254
+    metric: 1
+  - route: 0.0.0.0/0
+    next_hop: 15.15.15.1
+    metric: 10
+
+# ONLY IF THAT HOSTS IN GROUP [VyOS-IPsec]
+
+s_vti_routes:
+  - route: 10.255.255.0/30
+    next_hop_int: "{{ int_vti0 }}"
+
+
+########
+# PAT  #
+########
+
+nat_rules:
+    - rule_number: 10
+      desc_rule: BR1-C1-NET
+      outbound_int: eth2
+      protocol: all
+      source_net: 10.1.100.0/27
+      translation: masquerade
+
+
+#########
+# IPsec #
+#########
+
+esp_groups:
+  - esp_gp_name: VYOS-HQ-FW1-ESP
+    lifetime: 28800
+    mode: tunnel
+    pfs: dh-group5
+    prop_number: 1
+    encryption: aes128
+    hash: sha1
+
+ike_groups:
+  - ike_gp_name: VYOS-HQ-FW1-IKE
+    ike_version: ikev1
+    lifetime: 86400
+    prop_number: 1
+    pfs: 2
+    encryption: aes128
+    hash: sha1
+
+ipsec_ints:
+  - int: "{{ int_eth2 }}"
+
+s2s_peers:
+  - peer_ip: 2.2.2.2
+    local_wan_ip: 15.15.15.2
+    mode: pre-shared-secret
+    shared_secret: NewZealand123
+    remote_ip: 2.2.2.2
+    conn_type: initiate
+    esp_group: VYOS-HQ-FW1-ESP
+    ike_group: VYOS-HQ-FW1-IKE
+    local_ip: 15.15.15.2
+    vti_int: "{{ int_vti0 }}"
+    vti_esp_gp: VYOS-HQ-FW1-ESP

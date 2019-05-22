@@ -1,0 +1,6 @@
+{% for acl in acl_lists %}
+access-list {{ acl.name }} extended {{ acl.action }} {{ acl.protocol }} {{ acl.source }} {{ acl.destination }}
+{% endfor %}
+{% for acl_group in acl_groups %}
+access-group {{ acl_group.acl_name }} {{ acl_group.way }} interface {{ acl_group.interface }}
+{% endfor %}

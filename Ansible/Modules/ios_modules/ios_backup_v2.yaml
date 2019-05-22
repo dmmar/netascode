@@ -1,0 +1,12 @@
+---
+- name: Archive backup of running-config to TFTP
+  hosts: ALL
+  gather_facts: no
+
+  tasks:
+
+  - name: Archive backup of running-config to TFTP
+    ios_command:
+      commands:
+        - wr
+
