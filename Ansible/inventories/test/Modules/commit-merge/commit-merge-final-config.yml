@@ -27,4 +27,4 @@
       when: inventory_hostname in groups['Cisco-ASA']
       command: python asa_send_commands.py
       args:
-        chdir: Python_scripts/vASA/inventories/test/
+        chdir: "{{ inventory_dir }}/Python_scripts/vASA/"
