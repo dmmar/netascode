@@ -4,12 +4,12 @@ import os
 # Import class 'NetmikoOperator' from module 'NetmikoOperator.py'
 a = NetmikoOperator.NetmikoOperator()
 
-ip = '192.168.3.108'
+ip = '192.168.4.108'
 username = 'cisco'
 password = 'cisco'
 device = 'cisco_asa'
 hostname = 'HQ-FW1'
-file_name = os.path.abspath('/builds/root/netascode/Ansible/inventories/test/CONFIGS/HQ-FW1/FINAL_pre.conf')
+file_name = os.path.abspath('../../CONFIGS/HQ-FW1/FINAL_pre.conf')
 command = 'copy /noconfirm run flash:/rollback_config.txt'
 
 # files = []

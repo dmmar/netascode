@@ -9,7 +9,7 @@ username = 'cisco'
 password = 'cisco'
 device = 'cisco_asa'
 hostname = 'HQ-FW1'
-file_name = os.path.abspath('/builds/root/nac/Ansible/inventories/production/CONFIGS/HQ-FW1/FINAL_pre.conf')
+file_name = os.path.abspath('/builds/root/netascode/Ansible/inventories/production/CONFIGS/HQ-FW1/FINAL_pre.conf')
 command = 'copy /noconfirm run flash:/rollback_config.txt'
 
 # files = []
