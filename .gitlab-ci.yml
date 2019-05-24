@@ -1,7 +1,7 @@
 # these stages will run in this order:
 # If a job fails, then the jobs that are assigned to the next stage won’t run, rendering the pipeline as failed
 # Each task is isolated from each other. You need to use 'Artifacts' to connect tasks together.
-#
+# #
 
 # Run this task2 manually
 #  when: manual
