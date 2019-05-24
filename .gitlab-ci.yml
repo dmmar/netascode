@@ -88,11 +88,6 @@ deploy_to_test_Task1:
     - rm -f Ansible/ansible.cfg
     - mv Docker-runner/ansible.cfg /etc/ansible
     - echo "===================================================="
-    - cd Docker-runner
-    - chmod +x ./gitlab-napalm-config-dir.sh
-    - ./gitlab-napalm-config-dir.sh
-    - cd ..
-    - echo "===================================================="
     - echo "Commit-merge push 'FINAL.conf' for 'TEST' devices:"
     - cd Ansible
     - ansible-playbook -i inventories/test/hosts inventories/test/Modules/commit-merge/commit-merge-final-config.yml $ANSIBLE_TEST_HOSTS_VARS_LIMIT
@@ -181,11 +176,6 @@ deploy_to_prod_Task2:
   script:
     - rm -f Ansible/ansible.cfg
     - mv Docker-runner/ansible.cfg /etc/ansible
-    - echo "===================================================="
-    - cd Docker-runner
-    - chmod +x ./gitlab-napalm-config-dir.sh
-    - ./gitlab-napalm-config-dir.sh
-    - cd ..
     - echo "===================================================="
     - echo "Commit-merge push 'FINAL.conf' for 'PROD' devices:"
     - cd Ansible
