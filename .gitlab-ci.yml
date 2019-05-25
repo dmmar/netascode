@@ -228,6 +228,7 @@ verify_deploy_to_prod_Task2:
     - pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --archive-dir logs/ --runinfo-dir logs/ --ntp-server $PYATS_NTP_CHECK_PROD_HOSTS_NTP_SERVER --devices $PYATS_NTP_CHECK_PROD_HOSTS_VARS_LIMIT
   environment:
     name: production
+  when: manual
   only:
     - merge_requests
   artifacts:
