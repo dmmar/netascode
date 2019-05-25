@@ -13,21 +13,16 @@ import shutil
 # PATH TO DIR WHERE GIT WILL COPY MASTER BRANCH TO COMPARE
 # WHEN THE SCRIPT WILL RUN THAT DELETES 'MASTER' FOLDER AND DOWNLOAD A NEW
 
-GIT_MASTER_DIR = "/home/dmitrii/Desktop/nac_master_branch/master"
+GIT_MASTER_DIR = "/home/dmitrii/Desktop/netascode_master_branch/master"
 
 if os.path.isdir(GIT_MASTER_DIR):
     shutil.rmtree(GIT_MASTER_DIR)
 
-# USE SSH-KEY FOR DOWNLOAD A PRIVATE REPO
-
-git_ssh_identity_file = os.path.expanduser('~/.ssh/id_rsa')
-git_ssh_cmd = 'ssh -i %s' % git_ssh_identity_file
-
-with Git().custom_environment(GIT_SSH_COMMAND=git_ssh_cmd):
-     Repo.clone_from('git@github.com:dmmar/NetDevOps.git', GIT_MASTER_DIR, branch='master')
+with Git().custom_environment():
+     Repo.clone_from('https://github.com/dmmar/netascode.git', GIT_MASTER_DIR, branch='master')
 
 # PATH TO FOLDERS WHERE 'MD5' WILL CHECK CHECKSUM 'host_vars' FILES BETWEEN 'MASTER' and 'BRANCH'
-SRC_DIR_MASTER = os.path.abspath("/home/dmitrii/Desktop/nac_master_branch/master/Ansible/inventories/production/host_vars/")
+SRC_DIR_MASTER = os.path.abspath("/home/dmitrii/Desktop/netascode_master_branch/master/Ansible/inventories/production/host_vars/")
 SRC_DIR_BRANCH = os.path.abspath("/home/dmitrii/PycharmProjects/nac/Ansible/inventories/production/host_vars")
 
 for root, subdirs, files in os.walk(SRC_DIR_MASTER):
