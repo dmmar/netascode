@@ -23,7 +23,7 @@ replace_config: False
 # Base #
 ########
 
-hostname: ISP
+hostname: ISP1
 
 timezone: NZDT 13 0
 ntp_server: 8.8.8.8
