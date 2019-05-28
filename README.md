@@ -81,17 +81,29 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
 
 ### Step 3 (Generation configuration using Ansible+napalm)
 
+    Each network device is represented as XX.yaml file.
+    Those files contain variables and its values to build configs files.
+    To build configs files, Ansible Roles and Jinja2 templates are used.
+    
+    host_vars files located in:
+    
+    Ansible/inventories/production/host_vars
+    Ansible/inventories/test/host_vars
+    Ansible/inventories/development/host_vars
+    
+    To generate configurations:
+    
     # ansible-playbook -i inventories/development/hosts inventories/development/Modules/generate/generate-all-config-and-make-diff.yml
     # ansible-playbook -i inventories/test/hosts inventories/test/Modules/generate/generate-all-config-and-make-diff.yml
     # ansible-playbook -i inventories/production/hosts inventories/production/Modules/generate/generate-all-config-and-make-diff.yml
 
-    Configs location: 
+    Configs location:
     
     Ansible/inventories/development/CONFIGS
     Ansible/inventories/test/CONFIGS
     Ansible/inventories/production/CONFIGS
 
-### Step 4
+### Step 4 (sending and applying new configurations)
 
 
 ### Step X (optional)
