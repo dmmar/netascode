@@ -2,6 +2,11 @@
 
 ### Overview
 
+This repository contains the source files of the student project.
+
+The project introduction you can read from the following link:
+https://www.netascode.com/?p=64
+
 ### Prerequisites
 
 * PyCharm CE
@@ -13,15 +18,32 @@
 (for NetBox, GitLab CE, and docker-runner containers)
 * GNS3
 
-I personally tested on Ubuntu 18.04.2 LTS and PyCharm CE
+I personally tested on Ubuntu 18.04.2 LTS, PyCharm CE, and GNS3.
 
 For Ubuntu also needs:
 
 * apt-get install python3-setuptools
 * apt-get install python3-pip
-
-
+    
 ### Installation
+
+### Step -1 (GNS3)
+
+    To play with project (without any changes in inventory files, playbooks and etc.) 
+    you need to have a GNS3 server for all environments or only for one 
+    and build exacly the same network which I used for the project.
+    
+    - Topologies images can be found:
+    
+    Ansible/inventories/production/Topologies
+    Ansible/inventories/test/Topologies
+    Ansible/inventories/development/Topologies
+    
+    - GNS3 devices startup-configurations:
+    
+    GNS3/PROD-Startup-CFGs
+    GNS3/TEST-Startup-CFGs
+    GNS3/DEV-Startup-CFGs
 
 ### Step 0
 
@@ -48,6 +70,29 @@ file (ansible.cfg):
 
 For more details on ansible's configuration file visit:
 https://docs.ansible.com/ansible/latest/intro_configuration.html
+
+### Step 2 (testing access network devices via SSH)
+
+    # cd Ansible
+    
+    # ansible-playbook -i inventories/development/hosts inventories/development/Modules/PING/ping.yaml
+    # ansible-playbook -i inventories/test/hosts inventories/test/Modules/PING/ping.yaml
+    # ansible-playbook -i inventories/production/hosts inventories/production/Modules/PING/ping.yaml
+
+### Step 3 (Generation configuration using Ansible+napalm)
+
+    # ansible-playbook -i inventories/development/hosts inventories/development/Modules/generate/generate-all-config-and-make-diff.yml
+    # ansible-playbook -i inventories/test/hosts inventories/test/Modules/generate/generate-all-config-and-make-diff.yml
+    # ansible-playbook -i inventories/production/hosts inventories/production/Modules/generate/generate-all-config-and-make-diff.yml
+
+    Configs location: 
+    
+    Ansible/inventories/development/CONFIGS
+    Ansible/inventories/test/CONFIGS
+    Ansible/inventories/production/CONFIGS
+
+### Step 4
+
 
 ### Step X (optional)
 
