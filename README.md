@@ -161,9 +161,9 @@ If you want to make an ansible final commmand to generate configs,
 only for devices in 'host_vars' directory which you changed manually.
 
 
-![alt text](https://github.com/dmmar/static_images/1.png "example of changes")
+![example of changes](https://github.com/dmmar/netascode/blob/master/static_images/1.png "example of changes")
 
-![alt text](https://github.com/dmmar/static_images/2.png "ansible final command")
+![ansible final command](https://github.com/dmmar/netascode/blob/master/static_images/2.png "ansible final command")
 
 You need to fix files in the following path:
 
