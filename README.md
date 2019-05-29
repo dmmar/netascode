@@ -7,6 +7,10 @@ This repository contains the source files of the student project.
 The project introduction you can read from the following link:
 https://www.netascode.com/?p=64
 
+Objectives of the project were aimed at self-education and 
+improving practical skills in the area of computer networks 
+using an automation approach as the main tool.
+
 ### Overview diagram
 
 ![overview](https://github.com/dmmar/netascode/blob/master/static_images/3.png "overview")
@@ -115,14 +119,14 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     # ansible-playbook -i inventories/test/hosts inventories/test/Modules/commit-merge/commit-merge-final-config.yml
     # ansible-playbook -i inventories/production/hosts inventories/production/Modules/commit-merge/commit-merge-final-config.yml 
     
-    else: to use GitLab CI/CD pipeline to automate process 
+    else: to use GitLab CI/CD pipeline to automate commit-merge process:
     
     1) Please, read - 'Step Docker-containers'
     2) Import https://github.com/dmmar/netascode.git to GitLab CE
     3) Check assigned and registered Runner to that project
     4) Create a new issue and a new branch without a merge request
     5) Change branch from a master branch to a new branch
-    6) Make somechanges
+    6) Make some changes
     7) git remote add gitlab-local http://[gitlab-docker-container-repo]
     8) git add .
     9) git commit -m "whatever"
@@ -164,6 +168,7 @@ If you want to make an ansible final commmand to generate configs,
 
 only for devices in 'host_vars' directory which you changed manually.
 
+The script is useful because you do not need manually write devices down to make a line.
 
 ![example of changes](https://github.com/dmmar/netascode/blob/master/static_images/1.png "example of changes")
 
@@ -178,6 +183,9 @@ For files:
 * generate-test-diff.py
 
 Need to change to **your absolute path**
+
+    # PATH TO DIR WHERE GIT WILL DOWNLOAD MASTER BRANCH
+    # EVERYTIME WHEN THE SCRIPT WILL RUN THAT DELETES 'MASTER' FOLDER AND CREATE A NEW ONE
 
     GIT_MASTER_DIR = "/home/dmitrii/Desktop/netascode_master_branch/master"
     
