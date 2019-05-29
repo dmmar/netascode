@@ -206,3 +206,5 @@ Need to change to **your absolute path**
 * https://github.com/permitanyany/robotframework
 * https://github.com/networktocode/ntc-templates
 * https://github.com/google/textfsm
+* https://github.com/digitalocean/netbox/tree/master
+* https://github.com/colin-mccarthy/ansible-playbooks-for-cisco-ios
