@@ -7,6 +7,10 @@ This repository contains the source files of the student project.
 The project introduction you can read from the following link:
 https://www.netascode.com/?p=64
 
+### Overview diagram
+
+![overview](https://github.com/dmmar/netascode/blob/master/static_images/3.png "overview")
+
 ### Prerequisites
 
 * PyCharm CE
