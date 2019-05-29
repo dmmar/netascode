@@ -105,15 +105,36 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
 
 ### Step 4 (sending and applying new configurations)
 
+    If you want to use only terminal to commit-merge generated configurations:
+    
+    # ansible-playbook -i inventories/development/hosts inventories/development/Modules/commit-merge/commit-merge-final-config.yml 
+    # ansible-playbook -i inventories/test/hosts inventories/test/Modules/commit-merge/commit-merge-final-config.yml
+    # ansible-playbook -i inventories/production/hosts inventories/production/Modules/commit-merge/commit-merge-final-config.yml 
+    
+    else: to use GitLab CI/CD pipeline to automate process 
+    
+    1) Please, read - 'Step Docker-containers'
+    2) Import https://github.com/dmmar/netascode.git to GitLab CE
+    3) Check assigned and registered Runner to that project
+    4) Create a new issue and a new branch without a merge request
+    5) Change branch from a master branch to a new branch
+    6) Make somechanges
+    7) git remote add gitlab-local http://[gitlab-docker-container-repo]
+    8) git add .
+    9) git commit -m "whatever"
+    10) git push --mirror gitlab-local
+    11) Go to CI/CD in GitLab 
+    (if you made everything correctly, you will see a working pipeline) 
+    
 
-### Step X (optional)
+### Step Docker-containers (optional)
 
     To build docker containers such as NetBox, GitLab CE, and docker-runner:
         
     WARNING: DO NOT use these containers in real production environment 
     (NetBox has predefined values for DB passwords, secrets and etc.)
     
-    **For correct installation - Read official documentation!**
+    **For correct installation - Please, read official documentation!**
     
     WARNING2: Installation_components/NetBox/docker-compose.yml has predefined values, 
     for example: gitlab.nac.local:192.168.1.100.
@@ -133,13 +154,18 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     # docker-compose up -d
     # docker ps
 
-### Step X (optional)
+### Step script-diff (optional)
 
 If you want to make an ansible final commmand to generate configs,
 
-only for devices in 'host_vars' directory which you changed.
+only for devices in 'host_vars' directory which you changed manually.
 
-You need to fix these:
+
+![alt text](https://github.com/dmmar/static_images/1.png "example of changes")
+
+![alt text](https://github.com/dmmar/static_images/2.png "ansible final command")
+
+You need to fix files in the following path:
 
     /home/dmitrii/PycharmProjects/netascode/Ansible/Python_scripts/generate_diff
     
