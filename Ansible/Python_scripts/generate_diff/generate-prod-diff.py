@@ -23,7 +23,7 @@ with Git().custom_environment():
 
 # PATH TO FOLDERS WHERE 'MD5' WILL CHECK CHECKSUM 'host_vars' FILES BETWEEN 'MASTER' and 'BRANCH'
 SRC_DIR_MASTER = os.path.abspath("/home/dmitrii/Desktop/netascode_master_branch/master/Ansible/inventories/production/host_vars/")
-SRC_DIR_BRANCH = os.path.abspath("/home/dmitrii/PycharmProjects/nac/Ansible/inventories/production/host_vars")
+SRC_DIR_BRANCH = os.path.abspath("/home/dmitrii/PycharmProjects/netascode/Ansible/inventories/production/host_vars")
 
 for root, subdirs, files in os.walk(SRC_DIR_MASTER):
     checksums_master = []

@@ -85,11 +85,11 @@ interfaces:
     shutdown:
   - name: "{{ int_lo1 }}"
     description: "Server Net2"
-    ip: 10.255.255.4 255.255.255.252
+    ip: 10.255.255.5 255.255.255.252
     shutdown:
   - name: "{{ int_lo2 }}"
     description: "Server Net3"
-    ip: 10.255.255.8 255.255.255.252
+    ip: 10.255.255.9 255.255.255.252
     shutdown:
 
 # Interfaces-j2(ios_l2_to_l3.j2)
