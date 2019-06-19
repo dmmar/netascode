@@ -1,1 +1,9 @@
+# local_users
 
+users:
+  - name: test1
+    class: super-user
+    password: '"$6$rQaia7uY$vVWpxY0QeBPjQl5O5GYqwUUWsC1zEJDxgWdIy/EA5cWrGCKuF794A0Il17t5XfcXXlO.G/MYB9fh9zV.4Vp1y1"; ## SECRET-DATA'
+  - name: test2
+    class: super-user
+    password: '"$6$rQaia7uY$vVWpxY0QeBPjQl5O5GYqwUUWsC1zEJDxgWdIy/EA5cWrGCKuF794A0Il17t5XfcXXlO.G/MYB9fh9zV.4Vp1y1"; ## SECRET-DATA'

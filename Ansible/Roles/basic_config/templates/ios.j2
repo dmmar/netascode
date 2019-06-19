@@ -5,3 +5,8 @@ clock timezone {{ timezone }}
 !
 ntp server {{ ntp_server }}
 !
+{% for user in users %}
+!
+username {{ user.name }} privilege {{ user.priv }} secret {{ user.password }}
+!
+{% endfor %}

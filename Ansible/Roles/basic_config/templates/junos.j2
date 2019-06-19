@@ -1,6 +1,16 @@
 system {
     host-name {{ hostname }};
     time-zone {{ timezone }};
+    login {
+{% for user in users %}
+        user {{ user.name }} {
+            class {{ user.class }};
+            authentication {
+                encrypted-password {{ user.password }}
+            }
+        }
+{% endfor %}
+    }
     ntp {
         server {{ ntp_server }};
     }

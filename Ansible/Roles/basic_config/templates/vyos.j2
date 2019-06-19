@@ -16,13 +16,14 @@ system {
     }
     host-name {{ hostname }}
     login {
-        user vyos {
+{% for user in users %}
+        user {{ user.name }} {
             authentication {
-                encrypted-password $1$F7bDC8en$M/e8HL1CNie0nOymM8ebw1
-                plaintext-password ""
+                plaintext-password {{ user.password }}
             }
-            level admin
+            level {{ user.level }}
         }
+{% endfor %}
     }
     ntp {
         server {{ ntp_server }} {
