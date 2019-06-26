@@ -1,1 +1,14 @@
+# local_users
+
+users:
+  - name: vyos
+    level: admin
+    password: vyos
+  - name: test1
+    level: admin
+    password: cisco
+  - name: test2
+    level: admin
+    password: cisco
+
 

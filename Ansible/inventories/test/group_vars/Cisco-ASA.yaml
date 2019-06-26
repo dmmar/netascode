@@ -1,1 +1,10 @@
+# local_users
+
+users:
+  - name: test1
+    priv: 15
+    password: cisco
+  - name: test2
+    priv: 15
+    password: cisco
 
