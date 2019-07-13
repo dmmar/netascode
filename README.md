@@ -13,7 +13,8 @@ using an automation approach as the main tool.
 
 ### Overview diagram
 
-![overview](https://github.com/dmmar/netascode/blob/master/static_images/3.png "overview")
+![components](https://github.com/dmmar/netascode/blob/master/static_images/components.png "components")
+![overview](https://github.com/dmmar/netascode/blob/master/static_images/overview.png "overview")
 
 ### Prerequisites
 
