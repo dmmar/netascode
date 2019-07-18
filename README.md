@@ -11,6 +11,42 @@ Objectives of the project were aimed at self-education and
 improving practical skills in the area of computer networks 
 using an automation approach as the main tool.
 
+*Tested network OS: Cisco IOS, Cisco ASA, Juniper, and VyOS.*
+
+### Table of project files
+
+1. [Ansible](https://github.com/dmmar/netascode/tree/master/Ansible)
++ 1.1 [Modules](https://github.com/dmmar/netascode/tree/master/Ansible/Modules) - *folder contains common [Ansible playbooks] which can be used for dev/test/prod environments*
++ 1.2 [Python_scripts](https://github.com/dmmar/netascode/tree/master/Ansible/Python_scripts) - *Please, refer to ***### Step script-diff (optional)****
++ 1.3 [Roles](https://github.com/dmmar/netascode/tree/master/Ansible/Roles) - *folder contains [Ansible Roles and Jinja2 templates] which are used to generate configurations*
++ 1.4 [inventories](https://github.com/dmmar/netascode/tree/master/Ansible/inventories) - *folder contains an identical structure for ***dev/test/prod environments*** such as:*
++ 1.4.1 [CONFIGS](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/CONFIGS) - *folder contains ***generated*** partial and full configs for network devices, for example:*
++ 1.4.1.1 [BR1-AC1](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/CONFIGS/BR1-AC1):
+
+[1_basic-config.conf] - a partial config that is specific for Ansible Role [basic_config],
+
+[FINAL_pre.conf] - a full config that combines all partial configs in one,
+
+[FINAL_pre_DIFF.conf] - contains the difference between a generated configuration and current on the device,
+
+[FINAL.conf] that config will apply to the device using Ansible playbook [commit-merge-final-config.yml].
+
++ 1.4.2 [Modules](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/Modules) - *folder contains specific [Ansible playbooks] for env.*
++ 1.4.3 [Python_scripts](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/Python_scripts/vASA) - *used to apply a generated configuration from the file [FINAL_pre.conf] on Cisco vASA (HQ-FW1).*
++ 1.4.4 [Topologies](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/Topologies) - *contains network diagrams L1, L2, L3, etc.*
++ 1.4.5 [group_vars](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/group_vars) - *common variables for Ansible playbooks, for example: [Cisco.yaml] contains variables and values which are used for devices in [Cisco] group only. Groups can be seen in ***hosts*** file.*
++ 1.4.6 [host_vars](https://github.com/dmmar/netascode/tree/master/Ansible/inventories/development/host_vars) - *specific variables to each network device which are used for Ansible playbooks.*
++ 1.4.7 [hosts](https://github.com/dmmar/netascode/blob/master/Ansible/inventories/development/hosts) - *Ansible inventory file.*
+
+Variables in ***group_vars and host_vars*** are used for Ansible Roles/Jinja2 templates to generate configurations.
+
+2. [Docker-runner](https://github.com/dmmar/netascode/tree/master/Docker-runner) - *contains ansible.cfg for GitLab CI/CD runner*, Please, refer to ***Step 4 (sending and applying new configurations)***
+3. [GNS3](https://github.com/dmmar/netascode/tree/master/GNS3) - *folder contains startup configurations for network devices which are used to configure SSH access for Ansible.*
+4. [Installation_components](https://github.com/dmmar/netascode/tree/master/Installation_components) - *Please, refer to ***Step Docker-containers (optional)****
+5. [PyATS](https://github.com/dmmar/netascode/tree/master/PyATS) - *contains examples of PyATS testcases*
+6. [RobotFramework](https://github.com/dmmar/netascode/tree/master/RobotFramework) - *contains examples of RobotFramework/PyATS united testcases*
+7. [.gitlab-ci.yml](https://github.com/dmmar/netascode/blob/master/.gitlab-ci.yml) - *that file describes GitLab CI/CD pipeline*
+
 ### Overview diagram
 
 ![components](https://github.com/dmmar/netascode/blob/master/static_images/components.png "components")
