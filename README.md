@@ -220,7 +220,7 @@ The script is useful because you do not need manually write devices down to make
 
 You need to fix files in the following path:
 
-    /home/dmitrii/PycharmProjects/netascode/Ansible/Python_scripts/generate_diff
+    netascode/Ansible/Python_scripts/generate_diff
     
 For files:
 * generate-prod-diff.py
