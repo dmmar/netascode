@@ -59,8 +59,8 @@ Variables in ***group_vars and host_vars*** are used for Ansible Roles/Jinja2 te
 * Python virtualenv
 * pip3
 * git
-* Docker and docker-compose
-(for NetBox, GitLab CE, and docker-runner containers)
+* Debian server with Docker and docker-compose
+(for NetBox, GitLab CE, and docker-gitlab-runner containers)
 * GNS3
 
 I personally tested on Ubuntu 18.04.2 LTS, PyCharm CE, and GNS3.
@@ -89,6 +89,11 @@ For Ubuntu also needs:
     GNS3/PROD-Startup-CFGs
     GNS3/TEST-Startup-CFGs
     GNS3/DEV-Startup-CFGs
+    
+    Also, all network devices in GNS3 must be connected to the out-of-band management network.
+    I have used a built in GNS3 ethernet switch.
+    
+   ![gns3_test_network](https://github.com/dmmar/netascode/blob/master/static_images/gns3_test_network.png "gns3_test_network")
 
 ### Step 0
 
@@ -98,7 +103,7 @@ For Ubuntu also needs:
 
 ### Step 1 (Ansible module napalm-ansible)
 
-    Ansible/ansible.cfg
+    # Ansible/ansible.cfg
 
 Configure ansible to use napalm
 After napalm installation you need to configure proper path to library at ansible.cfg file. Example is below.
@@ -124,7 +129,7 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     # ansible-playbook -i inventories/test/hosts inventories/test/Modules/PING/ping.yaml
     # ansible-playbook -i inventories/production/hosts inventories/production/Modules/PING/ping.yaml
 
-### Step 3 (Generation configuration using Ansible+napalm)
+### Step 3 (Generation configuration using Ansible+NAPALM)
 
     Each network device is represented as XX.yaml file.
     Those files contain variables and its values to build configs files.
@@ -136,7 +141,7 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     Ansible/inventories/test/host_vars
     Ansible/inventories/development/host_vars
     
-    To generate configurations:
+    To generate configurations for all network devices:
     
     # ansible-playbook -i inventories/development/hosts inventories/development/Modules/generate/generate-all-config-and-make-diff.yml
     # ansible-playbook -i inventories/test/hosts inventories/test/Modules/generate/generate-all-config-and-make-diff.yml
@@ -158,9 +163,9 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     
     else: to use GitLab CI/CD pipeline to automate commit-merge process:
     
-    1) Please, read - 'Step Docker-containers'
+    1) Please, read - ### Step Docker-containers (optional)
     2) Import https://github.com/dmmar/netascode.git to GitLab CE
-    3) Check assigned and registered Runner to that project
+    3) Check assigned and registered GitLab Runner to that project
     4) Create a new issue and a new branch without a merge request
     5) Change branch from a master branch to a new branch
     6) Make some changes
@@ -169,31 +174,33 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     9) git commit -m "whatever"
     10) git push --mirror gitlab-local
     11) Go to CI/CD in GitLab 
-    (if you made everything correctly, you will see a working pipeline) 
+    (if you made everything correctly, you will see a working pipeline which will apply generated configurations)
+    
+   [.gitlab-ci.yml](https://github.com/dmmar/netascode/blob/master/.gitlab-ci.yml) - *that file describes GitLab CI/CD pipeline*
     
 
 ### Step Docker-containers (optional)
 
-    To build docker containers such as NetBox, GitLab CE, and docker-runner:
+    To build docker containers such as NetBox, GitLab CE, and docker-gitlab-runner:
         
     WARNING: DO NOT use these containers in real production environment 
-    (NetBox has predefined values for DB passwords, secrets and etc.)
+    (NetBox has predefined values for DB passwords, secrets, etc.)
     
-    **For correct installation - Please, read official documentation!**
+    **For correct installation in production - Please, read official documentation!**
     
-    WARNING2: Installation_components/NetBox/docker-compose.yml has predefined values, 
+    WARNING2: [Installation_components/NetBox/docker-compose.yml] has predefined values, 
     for example: gitlab.nac.local:192.168.1.100.
     
     For my project host 192.168.1.100 was a VM Debian with installed Docker and docker-compose.
    More information: https://www.netascode.com/?p=166
 
-    To install docker-compose and disable firewall:
+    To install docker-compose and disable firewall on Debian server:
 
     # cd Installation_components
     # chmod +x docker_compose_setup.sh
     # ./docker_compose_setup.sh
     
-    To install docker containers using docker-compose.yml file:
+    To install docker containers [GitLab CE], [docker runner for GitLab], [NetBox] using docker-compose.yml file on Debian server:
     
     # cd Installation_components/NetBox
     # docker-compose up -d
