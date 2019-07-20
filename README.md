@@ -180,31 +180,36 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     
 
 ### Step Docker-containers (optional)
-
-    To build docker containers such as NetBox, GitLab CE, and docker-gitlab-runner:
         
-    WARNING: DO NOT use these containers in real production environment 
+    WARNING: DO NOT use these containers in real production environment
     (NetBox has predefined values for DB passwords, secrets, etc.)
     
     **For correct installation in production - Please, read official documentation!**
     
-    WARNING2: [Installation_components/NetBox/docker-compose.yml] has predefined values, 
-    for example: gitlab.nac.local:192.168.1.100.
+    WARNING2: [Installation_components/docker-compose.yml] has predefined values,
+    for example: gitlab.nac.local:192.168.1.100
+    For my project, host 192.168.1.100 was a VM Debian with installed Docker and docker-compose.
     
-    For my project host 192.168.1.100 was a VM Debian with installed Docker and docker-compose.
    More information: https://www.netascode.com/?p=166
-
-    To install docker-compose and disable firewall on Debian server:
+    
+    1. To install [docker-compose] and [disable firewall] on Debian server:
 
     # cd Installation_components
     # chmod +x docker_compose_setup.sh
     # ./docker_compose_setup.sh
     
-    To install docker containers [GitLab CE], [docker runner for GitLab], [NetBox] using docker-compose.yml file on Debian server:
+    2. You need to change [192.168.1.100] in [Installation_components/docker-compose.yml] on your IP address of the debian server.
+       Also, on the Debian server add [gitlab.nac.local] record to /etc/hosts file.
     
-    # cd Installation_components/NetBox
+    3. To install docker containers [GitLab CE], [docker-gitlab-runner] on Debian server using docker-compose.yml file:
+    
+    # cd Installation_components
     # docker-compose up -d
     # docker ps
+    
+    4. To install docker container [NetBox]:
+    
+    https://github.com/netbox-community/netbox-docker
 
 ### Step script-diff (optional)
 

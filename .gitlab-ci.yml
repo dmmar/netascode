@@ -221,7 +221,7 @@ verify_deploy_to_prod_Task2:
   stage: verify_deploy_to_prod
   image: networkascode/nac:ubuntu-nac-v2
   tags:
-    - GNS3
+    - PROD
   script:
     - echo "Run PyATS network tests for 'PROD' devices:"
     - cd PyATS/inventories/production/

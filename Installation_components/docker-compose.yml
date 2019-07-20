@@ -1,0 +1,66 @@
+version: '2.1'
+
+services:
+
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    container_name: 'gitlab-ce'
+    restart: always
+    hostname: 'gitlab.nac.local'
+    environment:
+      - TZ=Pacific/Auckland
+      - GITLAB_TIMEZONE=Auckland
+      - GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN=networkascoderunners
+      - GITLAB_HOST=http://gitlab.nac.local
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - '/srv/gitlab/config:/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/var/opt/gitlab'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://gitlab.nac.local"]
+      interval: 10s
+      timeout: 10s
+      retries: 60
+    extra_hosts:
+      - "gitlab.nac.local:192.168.1.100"
+
+  docker_runner1:
+    image: gitlab/gitlab-runner
+    container_name: 'docker-runner1'
+    restart: always
+    depends_on:
+      gitlab:
+          condition: service_healthy
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "gitlab.nac.local:192.168.1.100"
+
+  register-runner1:
+    restart: 'no'
+    container_name: 'register-runner1'
+    image: gitlab/gitlab-runner:alpine
+    depends_on:
+      - docker_runner1
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+    command:
+      - register
+      - --non-interactive
+      - --locked=false
+      - --name=Docker-Runner1
+      - --executor=docker
+      - --docker-image=alpine:3
+      - --tag-list=GNS3,Syntax-check,PROD
+      - --run-untagged=false
+      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CI_SERVER_URL=http://gitlab.nac.local/
+      - REGISTRATION_TOKEN=networkascoderunners
+    extra_hosts:
+      - "gitlab.nac.local:192.168.1.100"
