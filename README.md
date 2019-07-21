@@ -59,8 +59,8 @@ Variables in ***group_vars and host_vars*** are used for Ansible Roles/Jinja2 te
 * Python virtualenv
 * pip3
 * git
-* Debian server with Docker and docker-compose
-(for NetBox, GitLab CE, and docker-gitlab-runner containers)
+* Debian10-amd64 server with [Docker] and [docker-compose]
+(for NetBox, GitLab CE, and docker-gitlab-runner containers) - optional
 * GNS3
 
 I personally tested on Ubuntu 18.04.2 LTS, PyCharm CE, and GNS3.
