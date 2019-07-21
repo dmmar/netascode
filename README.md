@@ -11,6 +11,8 @@ Objectives of the project were aimed at self-education and
 improving practical skills in the area of computer networks 
 using an automation approach as the main tool.
 
+You can use this repo as an example to play and to learn network automation.
+
 *Tested network OS: Cisco IOS, Cisco ASA, Juniper, and VyOS.*
 
 ### Table of project files
