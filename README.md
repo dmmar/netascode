@@ -15,6 +15,8 @@ You can use this repo as an example to play and to learn network automation.
 
 *Tested network OS: Cisco IOS, Cisco ASA, Juniper, and VyOS.*
 
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/dmmar/netascode)
+
 ### Table of project files
 
 1. [Ansible](https://github.com/dmmar/netascode/tree/master/Ansible)
