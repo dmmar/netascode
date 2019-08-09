@@ -103,7 +103,7 @@ For Ubuntu also needs:
 
     # git clone https://github.com/dmmar/netascode.git
     
-    # pip3 -r requirements.txt
+    # pip3 install -r requirements.txt
 
 ### Step 1 (Ansible module napalm-ansible)
 
