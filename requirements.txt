@@ -40,7 +40,7 @@ ipython==7.4.0
 ipython-genutils==0.2.0
 itsdangerous==1.1.0
 jedi==0.13.3
-Jinja2==2.10
+Jinja2>=2.10.1
 jsonpickle==1.1
 junit-xml==1.8
 junos-eznc==2.2.0
