@@ -196,7 +196,7 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     # cd PyATS/ex5_vlans
     # pyats run job job1.py --testbed-file testbed.yaml
     
-    **TestCase-3 [ntp1]** - checks NTP server (witout a rollback, if NTP server is not correct) 
+    **TestCase-3 [ntp1]** - checks NTP server (without a rollback, if NTP server is not correct) 
     !!! default correct ntp server is 10.255.255.2 !!!
     # cd PyATS/inventories/[environment]
     # pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --ntp-server 10.255.255.2 --devices HQ-FW1 HQ-AC1 --archive-dir logs/ --runinfo-dir logs/
