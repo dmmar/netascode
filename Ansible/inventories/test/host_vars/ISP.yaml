@@ -53,16 +53,16 @@ interfaces:
   - name: "{{ int_gi1 }}"
     description: "TO_BR1-ED1-CompanyX"
     ip: 15.15.15.1 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
   - name: "{{ int_gi2 }}"
     description: "TO_BR2-FW1-CompanyX"
     ip: 20.2.2.1 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
   - name: "{{ int_gi3 }}"
     description: "TO_HQ-ED1-CompanyX"
     ip: 1.1.1.1 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
   - name: "{{ int_gi4 }}"
     description: "TO_HQ-FW1-CompanyX"
     ip: 2.2.2.1 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
