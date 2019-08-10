@@ -68,15 +68,15 @@ interfaces:
   - name: "{{ int_lo50 }}"
     description: "OSPF AREA 50 NET1"
     ip: 10.255.50.1 255.255.255.0
-    shutdown:
+    shutdown: no shutdown
   - name: "{{ int_gi1 }}"
     description: "TO-ISP"
     ip: 1.1.1.2 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
   - name: "{{ int_gi2 }}"
     description: "TO-HQ-FW1"
     ip: 10.255.0.1 255.255.255.252
-    shutdown:
+    shutdown: no shutdown
 
 ###########
 # Routing #
