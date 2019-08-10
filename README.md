@@ -182,7 +182,46 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     
    [.gitlab-ci.yml](https://github.com/dmmar/netascode/blob/master/.gitlab-ci.yml) - *that file describes GitLab CI/CD pipeline*
     
-
+### Step 5 (run network verification testcases from the terminal)
+    =======
+    [PyATS]
+    =======
+    **TestCase-1 [connectivity]** - ping and trace from HQ-Clients to virtual (8.8.8.8) and HQ-S1 (10.255.255.2)
+    [Development environment]
+    # cd PyATS/ex4_pings
+    # pyats run job job1.py --testbed-file testbed.yaml
+    
+    **TestCase-2 [vlans]** - checks VLANs on switches in HQ-site [HQ-DIS1,HQ-DIS2,HQ-AC1,HQ-AC2,HQ-AC3,HQ-AC4]
+    [Development environment]
+    # cd PyATS/ex5_vlans
+    # pyats run job job1.py --testbed-file testbed.yaml
+    
+    **TestCase-3 [ntp1]** - checks NTP server (witout a rollback, if NTP server is not correct) 
+    !!! default correct ntp server is 10.255.255.2 !!!
+    # cd PyATS/inventories/[environment]
+    # pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --ntp-server 10.255.255.2 --devices HQ-FW1 HQ-AC1 --archive-dir logs/ --runinfo-dir logs/
+    
+    **TestCase-4 [ntp2]** - checks NTP server (DO a rollback to a 1 step back, if NTP server is not correct)
+    !!! default correct ntp server is 10.255.255.2 !!!
+    # cd PyATS/inventories/[environment]
+    open job.py
+    comment the next line -> run('ntp_check_v2_no_rollback.py', devices=devices, ntp_server=ntp_server)
+    uncomment the next line -> #run('ntp_check_v3.py', devices = devices, ntp_server = ntp_server)
+    # pyats run job job.py --testbed-file testbed.yaml --html-logs logs/ --ntp-server 1.1.1.1 --devices HQ-FW1 HQ-AC1 --archive-dir logs/ --runinfo-dir logs/
+    
+    **TestCase-5 [rollback]** - DO a rollback to a 1 step back [works for Cisco IOS, Cisco ASA, JunOS, and VyOS]
+    [Development environment]
+    # cd PyATS/ex6_rollback
+    # python rollback.py
+    
+    ===========================
+    [PyATS and Robot Framework]
+    ===========================
+    **TestCase-1 [connectivify and vlans]**
+    # cd RobotFramework/inventories/[environment]
+    # robot pyats1.robot
+    
+    
 ### Step Docker-containers (optional)
         
     WARNING: DO NOT use these containers in real production environment
