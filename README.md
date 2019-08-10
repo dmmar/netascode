@@ -13,7 +13,7 @@ using an automation approach as the main tool.
 
 You can use this repo as an example to play and to learn network automation.
 
-*Tested network OS: Cisco IOS, Cisco ASA, Juniper, and VyOS.*
+*Tested network OS: Cisco IOS (IOSv, IOSvL2), Cisco vASA (9.x), JunOS (vSRX 17.3R1) , and VyOS (1.1.8).*
 
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/dmmar/netascode)
 
