@@ -169,15 +169,16 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     
     1) Please, read - ### Step Docker-containers (optional)
     2) Import https://github.com/dmmar/netascode.git to GitLab CE
-    3) Check assigned and registered GitLab Runner to that project
+    3) Check assigned and registered GitLab Runner to that project and tags
     4) Create a new issue and a new branch without a merge request
-    5) Change branch from a master branch to a new branch
+    5) Change a master branch to a new branch in PyCharm CE
     6) Make some changes
     7) git remote add gitlab-local http://[gitlab-docker-container-repo]
     8) git add .
     9) git commit -m "whatever"
     10) git push --mirror gitlab-local
-    11) Go to CI/CD in GitLab 
+    11) Create a merge request
+    12) Go to CI/CD in GitLab
     (if you made everything correctly, you will see a working pipeline which will apply generated configurations)
     
    [.gitlab-ci.yml](https://github.com/dmmar/netascode/blob/master/.gitlab-ci.yml) - *that file describes GitLab CI/CD pipeline*
