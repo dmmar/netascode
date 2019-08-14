@@ -181,6 +181,8 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     12) Go to CI/CD in GitLab
     (if you made everything correctly, you will see a working pipeline which will apply generated configurations)
     
+   ![example_of_pipeline.png](https://github.com/dmmar/netascode/blob/master/static_images/example_of_pipeline.png "example_of_pipeline")
+    
    [.gitlab-ci.yml](https://github.com/dmmar/netascode/blob/master/.gitlab-ci.yml) - *that file describes GitLab CI/CD pipeline*
     
 ### Step 5 (run network verification testcases from the terminal)
