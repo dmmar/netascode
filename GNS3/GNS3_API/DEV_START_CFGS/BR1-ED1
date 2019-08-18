@@ -1,0 +1,23 @@
+configure
+
+set system host-name VyOS-BR1-ED1
+
+set service ssh port 22
+
+set interfaces ethernet eth0 address 192.168.4.111/24
+
+set interfaces ethernet eth0 description MGMT-ONLY
+
+set service ssh listen-address 192.168.4.111
+
+set service ssh allow-root
+
+set protocols static route 192.168.1.0/24 next-hop 192.168.4.254
+
+commit
+
+save
+
+exit
+
+exit

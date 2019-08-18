@@ -1,0 +1,280 @@
+---
+project_name: 'gns3_test_company_x'
+gns3_server: 'http://172.30.33.200:3080'
+gns3_host_ip: '172.30.33.200' # for [gns3_send_start_config_telnet]
+START_CFGS_PATH: 'TEST_START_CFGS/' # for [gns3_send_start_config_telnet]
+MGMT-SW: 'MGMT-SW' # for [gns3_create_mgmt_links]
+
+# global_delay_factor for [gns3_send_start_config_telnet]
+# I used a global delay parameter because
+# my GNS3 server is located far away from me (380>= latency).
+# info https://ktbyers.github.io/netmiko/docs/netmiko/
+
+global_delay_factor: 4
+
+# Manually created ethernet 'MGMT-SW' switch on 24 ports on GNS3 server
+# ETH-SW-24P
+
+gns3_nodes:
+# The following nodes will be created in the GNS3 project
+# ip_mgmt: - that IP uses for communication with the node via SSH
+  # Node1
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-AC1
+    ip_mgmt: 192.168.3.100
+  # Node2
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-AC2
+    ip_mgmt: 192.168.3.101
+  # Node3
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-AC3
+    ip_mgmt: 192.168.3.102
+  # Node4
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-AC4
+    ip_mgmt: 192.168.3.103
+  # Node5
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-DIS1
+    ip_mgmt: 192.168.3.104
+  # Node6
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-DIS2
+    ip_mgmt: 192.168.3.105
+  # Node7
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-SF1
+    ip_mgmt: 192.168.3.107
+  # Node8
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: HQ-CO1
+    ip_mgmt: 192.168.3.106
+  # Node9
+  - appliance: 'Cisco IOSvL2 15.2.4055'
+    name: BR1-AC1
+    ip_mgmt: 192.168.3.112
+  # Node10
+  - appliance: 'Cisco IOSv 15.6(2)T'
+    name: ISP
+    ip_mgmt: 192.168.3.110
+  # Node11
+  - appliance: 'Cisco IOSv 15.6(2)T'
+    name: HQ-ED1
+    ip_mgmt: 192.168.3.109
+  # Node12
+  - appliance: 'Cisco ASAv vasa_9_9_2'
+    name: HQ-FW1
+    ip_mgmt: 192.168.3.108
+  # Node13
+  - appliance: 'VyOS 1.1.8'
+    name: BR1-ED1
+    ip_mgmt: 192.168.3.111
+  # Node14
+  - appliance: 'vSRX 17.3R1'
+    name: BR2-FW1
+    ip_mgmt: 192.168.3.113
+  # Node15
+  - appliance: VPCS
+    name: HQ-C1
+  # Node16
+  - appliance: VPCS
+    name: HQ-C2
+  # Node17
+  - appliance: VPCS
+    name: HQ-C3
+  # Node18
+  - appliance: VPCS
+    name: HQ-C4
+  # Node19
+  - appliance: VPCS
+    name: BR1-C1
+  # Node20
+  - appliance: VPCS
+    name: BR2-C1
+  # Node21
+  - appliance: ETH-SW-24P
+    name: MGMT-SW
+  # Node22
+  - appliance: Cloud
+    name: CLOUD
+  # Node23
+  - appliance: VPCS
+    name: HQ-S1
+
+gns3_links:
+# The following link pairs describe P2P ethernet connections between nodes
+  # Pair1
+  - node1_name: ISP
+    node1_interface: '3'
+    node2_name: HQ-ED1
+    node2_interface: '1'
+  # Pair2
+  - node1_name: ISP
+    node1_interface: '4'
+    node2_name: HQ-FW1
+    node2_interface: '1'
+  # Pair3
+  - node1_name: ISP
+    node1_interface: '1'
+    node2_name: BR1-ED1
+    node2_interface: '2'
+  # Pair4
+  - node1_name: ISP
+    node1_interface: '2'
+    node2_name: BR2-FW1
+    node2_interface: '1'
+  # Pair5
+  - node1_name: BR1-AC1
+    node1_interface: '2'
+    node2_name: BR1-ED1
+    node2_interface: '1'
+  # Pair6
+  - node1_name: BR1-AC1
+    node1_interface: '1'
+    node2_name: BR1-C1
+    node2_interface: '0'
+  # Pair7
+  - node1_name: BR2-FW1
+    node1_interface: '2'
+    node2_name: BR2-C1
+    node2_interface: '0'
+  # Pair8
+  - node1_name: HQ-ED1
+    node1_interface: '2'
+    node2_name: HQ-FW1
+    node2_interface: '3'
+  # Pair9
+  - node1_name: HQ-FW1
+    node1_interface: '2'
+    node2_name: HQ-CO1
+    node2_interface: '1'
+  # Pair10
+  - node1_name: HQ-CO1
+    node1_interface: '3'
+    node2_name: HQ-DIS1
+    node2_interface: '3'
+  # Pair11
+  - node1_name: HQ-CO1
+    node1_interface: '4'
+    node2_name: HQ-DIS2
+    node2_interface: '4'
+  # Pair12
+  - node1_name: HQ-CO1
+    node1_interface: '2'
+    node2_name: HQ-SF1
+    node2_interface: '2'
+  # Pair13
+  - node1_name: HQ-DIS1
+    node1_interface: '1'
+    node2_name: HQ-DIS2
+    node2_interface: '1'
+  # Pair14
+  - node1_name: HQ-DIS1
+    node1_interface: '2'
+    node2_name: HQ-DIS2
+    node2_interface: '2'
+  # Pair15
+  - node1_name: HQ-DIS1
+    node1_interface: '5'
+    node2_name: HQ-AC1
+    node2_interface: '5'
+  # Pair16
+  - node1_name: HQ-DIS1
+    node1_interface: '6'
+    node2_name: HQ-AC2
+    node2_interface: '6'
+  # Pair17
+  - node1_name: HQ-DIS1
+    node1_interface: '9'
+    node2_name: HQ-AC3
+    node2_interface: '9'
+  # Pair18
+  - node1_name: HQ-DIS1
+    node1_interface: '8'
+    node2_name: HQ-AC4
+    node2_interface: '8'
+  # Pair19
+  - node1_name: HQ-DIS2
+    node1_interface: '8'
+    node2_name: HQ-AC1
+    node2_interface: '8'
+  # Pair20
+  - node1_name: HQ-DIS2
+    node1_interface: '9'
+    node2_name: HQ-AC2
+    node2_interface: '9'
+  # Pair21
+  - node1_name: HQ-DIS2
+    node1_interface: '5'
+    node2_name: HQ-AC3
+    node2_interface: '5'
+  # Pair22
+  - node1_name: HQ-DIS2
+    node1_interface: '6'
+    node2_name: HQ-AC4
+    node2_interface: '6'
+  # Pair23
+  - node1_name: HQ-C1
+    node1_interface: '0'
+    node2_name: HQ-AC1
+    node2_interface: '1'
+  # Pair24
+  - node1_name: HQ-C2
+    node1_interface: '0'
+    node2_name: HQ-AC2
+    node2_interface: '1'
+  # Pair25
+  - node1_name: HQ-C3
+    node1_interface: '0'
+    node2_name: HQ-AC3
+    node2_interface: '1'
+  # Pair26
+  - node1_name: HQ-C4
+    node1_interface: '0'
+    node2_name: HQ-AC4
+    node2_interface: '1'
+  # Pair27
+  - node1_name: CLOUD
+    node1_interface: '0'
+    node2_name: MGMT-SW
+    node2_interface: '0'
+  # Pair28
+  - node1_name: HQ-S1
+    node1_interface: '0'
+    node2_name: HQ-SF1
+    node2_interface: '1'
+
+gns3_startup_config_telnet:
+# On these devices will be uploaded a startup config using telnet from 'START_CFGS_PATH:'
+  - name: HQ-AC1
+  - name: HQ-AC2
+  - name: HQ-AC3
+  - name: HQ-AC4
+  - name: HQ-DIS1
+  - name: HQ-DIS2
+  - name: HQ-SF1
+  - name: HQ-CO1
+  - name: BR1-AC1
+  - name: ISP
+  - name: HQ-ED1
+  - name: HQ-FW1
+  - name: BR1-ED1
+  - name: BR2-FW1
+
+gns3_mgmt_links:
+# The following devices will be connected to the 'MGMT-SW' for remote access via SSH
+  - name: HQ-AC1
+  - name: HQ-AC2
+  - name: HQ-AC3
+  - name: HQ-AC4
+  - name: HQ-DIS1
+  - name: HQ-DIS2
+  - name: HQ-SF1
+  - name: HQ-CO1
+  - name: BR1-AC1
+  - name: ISP
+  - name: HQ-ED1
+  - name: HQ-FW1
+  - name: BR1-ED1
+  - name: BR2-FW1
