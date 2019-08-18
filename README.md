@@ -97,6 +97,10 @@ For Ubuntu also needs:
     Also, all network devices in GNS3 must be connected to the out-of-band management network.
     I have used a built in GNS3 ethernet switch.
     
+   For lazy deployment, you can use [gns3_auto_topology_builder]:
+    
+   [gns3_auto_topology_builder](https://github.com/dmmar/netascode/tree/master/GNS3/GNS3_API)
+    
    ![gns3_test_network](https://github.com/dmmar/netascode/blob/master/static_images/gns3_test_network.png "gns3_test_network")
 
 ### Step 0
