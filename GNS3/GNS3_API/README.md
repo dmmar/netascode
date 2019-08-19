@@ -1,15 +1,15 @@
 # gns3_auto_topology_builder
 
+Readme file was taken and changed from [gns3_auto_topology_builder](https://github.com/dmmar/gns3_auto_topology_builder)
+
 ## Overview
 
-   This repository contains a python3 script **[gns3_deploy_topology.py]**
+   This folder contains a python3 script **[gns3_deploy_topology.py]**
    that is used to deploy a GNS3 topology from a YAML file using GNS3 API.
 
    The auto_builder can be useful in combination with CI/CD. For example, to build a development environment for a Network Engineer.
    
    The main idea was to do not open GNS3 GUI interface to create/delete/connect devices and use it like a code because my GNS3 server is located far away from me [>=380ms.] and it was hard to use GUI interface.
-
-   You can find some examples in [Examples](https://github.com/dmmar/gns3_auto_topology_builder/blob/master/Examples) and [NetasCode_example](https://github.com/dmmar/gns3_auto_topology_builder/blob/master/NetasCode_example) folders.
 
    **Tested on [GNS3 2.1.21] and appliances such as Cisco IOSv, IOSvL2, vASA 9.9.2, VyOS 1.1.8 and JunOS vSRX 17.3R1.**
 
@@ -29,10 +29,9 @@
 
     # pip3 install -r requirements.txt
 
-## Running NetasCode example:
+## Running [NetasCode] example:
 
     You can use this example to deploy GNS3 topologies for dev/test/prod env. of the virtual fictional company 'X' and play with network automation.
-   More information: https://github.com/dmmar/netascode
 
     The most important part is to get the right names of appliances from a GNS3 server.
 
