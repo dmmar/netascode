@@ -106,6 +106,6 @@ urllib3==1.24.2
 virlutils==0.8.4
 VyattaConfParser==0.5.1
 wcwidth==0.1.7
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 xmltodict==0.12.0
 yamllint==1.15.0
