@@ -5,7 +5,7 @@
 This repository contains the source files of the student project.
 
 The project introduction you can read from the following link:
-https://www.netascode.com/?p=64
+http://www.netascode.com/1/
 
 Objectives of the project were aimed at self-education and 
 improving practical skills in the area of computer networks 
@@ -240,7 +240,6 @@ https://docs.ansible.com/ansible/latest/intro_configuration.html
     for example: gitlab.nac.local:192.168.1.100
     For my project, host 192.168.1.100 was a VM Debian with installed Docker and docker-compose.
     
-   More information: https://www.netascode.com/?p=166
     
     1. To install [docker-compose] and [disable firewall] on Debian server:
 
