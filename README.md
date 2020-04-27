@@ -67,7 +67,7 @@ Variables in ***group_vars and host_vars*** are used for Ansible Roles/Jinja2 te
 (for NetBox, GitLab CE, and docker-gitlab-runner containers) - optional
 * GNS3
 
-I personally tested on Ubuntu 18.04.2 LTS, Python3.7, PyCharm CE, and GNS3.
+I personally tested on Ubuntu 18.04.2 LTS, Python3.7, PyCharm CE, and GNS3 2.1.21.
 
 For Ubuntu also needs:
 
