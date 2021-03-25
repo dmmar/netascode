@@ -88,7 +88,7 @@ pynetbox==4.0.6
 pynxos==0.0.3
 pyserial==3.4
 python-dateutil==2.7.5
-PyYAML==5.1
+PyYAML==5.4
 requests==2.21.0
 robotframework==3.1.1
 robotframework-sshlibrary==3.3.0
