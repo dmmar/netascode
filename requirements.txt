@@ -1,4 +1,4 @@
-ansible==2.7.16
+ansible==2.10.0
 asn1crypto==0.24.0
 asyncssh==1.16.1
 backcall==0.1.0
