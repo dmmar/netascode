@@ -7,7 +7,7 @@ cryptography==2.7
 future==0.17.1
 idna==2.8
 netmiko==2.4.1
-paramiko==2.6.0
+paramiko==2.10.1
 pexpect==4.7.0
 prettytable==0.7.2
 ptyprocess==0.6.0
